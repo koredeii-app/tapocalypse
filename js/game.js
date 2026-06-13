@@ -235,25 +235,25 @@ function animateEarthTap() {
 }
 
 /**
- * 地球タップ時の処理（スコア加算・エフェクト）
- * @param {Event} e - TouchEvent または PointerEvent
+ * 画面全体タップ時の処理（スコア加算・エフェクト）
+ * ボーナスターゲットは stopPropagation するため、ここには届かない
+ * @param {Event} e - TouchEvent または MouseEvent
  */
-function onEarthTap(e) {
+function onTapAreaTap(e) {
   if (!state.gameRunning) return;
 
-  e.preventDefault();  // スクロール・ズーム等のデフォルト動作を抑制
-  e.stopPropagation(); // tapArea への伝播を止める
+  e.preventDefault(); // スクロール・ズーム等のデフォルト動作を抑制
 
   // スコア加算
   state.score += CONFIG.EARTH_TAP_SCORE;
   state.taps++;
   updateScoreDisplay();
 
-  // タップ位置の取得（touch / pointer 両対応）
+  // タップ位置の取得（touch / mouse 両対応）
   const point = e.touches ? e.touches[0] : e;
   showTapEffect(point.clientX, point.clientY);
 
-  // 地球のアニメーション
+  // 地球のリアクションアニメーション
   animateEarthTap();
 }
 
@@ -558,18 +558,10 @@ function init() {
     startCountdown();
   });
 
-  // ゲーム画面：地球タップ
-  EL.earthTarget.addEventListener('touchstart', onEarthTap, { passive: false });
-  EL.earthTarget.addEventListener('click', onEarthTap);
-
-  // ゲーム画面：エリア背景タップ（地球以外のエリアをタップしたときも
-  // エフェクトを出す演出用。スコアは加算しない）
-  EL.tapArea.addEventListener('touchstart', (e) => {
-    if (!state.gameRunning) return;
-    // 地球・ボーナス以外のエリアタップ
-    const point = e.touches[0];
-    showTapEffect(point.clientX, point.clientY);
-  }, { passive: true });
+  // ゲーム画面：画面全体タップでスコア加算
+  // ボーナスターゲットは stopPropagation するため二重加算にならない
+  EL.tapArea.addEventListener('touchstart', onTapAreaTap, { passive: false });
+  EL.tapArea.addEventListener('click',      onTapAreaTap);
 
   // リザルト：もう一度ボタン
   EL.btnRetry.addEventListener('click', () => {
