@@ -410,8 +410,7 @@ function startCountdown() {
 
     if (count <= 0) {
       clearInterval(intervalId);
-      // カウントダウン最後のメッセージを少しの間だけ見せる
-      updateCountdownDisplay(1);
+      // 「1」は前のティックで表示済みなので、そのまま少し待ってゲーム開始
       setTimeout(startGame, 600);
       return;
     }
