@@ -1,0 +1,68 @@
+.screen {
+  /* globals.css の .screen を継承しつつ縦中央レイアウト */
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+  padding: var(--space-xl) var(--space-md);
+  text-align: center;
+}
+
+/* タイトル */
+.title {
+  font-size: clamp(2.2rem, 9vw, 3.2rem);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-neon-cyan);
+  text-shadow:
+    0 0 7px var(--color-neon-cyan),
+    0 0 20px var(--color-neon-cyan),
+    0 0 40px var(--color-neon-cyan);
+  animation: titlePulse 3s ease-in-out infinite alternate;
+}
+
+@keyframes titlePulse {
+  from { text-shadow: 0 0 7px var(--color-neon-cyan), 0 0 20px var(--color-neon-cyan), 0 0 40px var(--color-neon-cyan); }
+  to   { text-shadow: 0 0 4px var(--color-neon-cyan), 0 0 10px var(--color-neon-cyan), 0 0 18px var(--color-neon-cyan); }
+}
+
+/* サブタイトル */
+.subtitle {
+  font-size: 1.2rem;
+  color: var(--color-neon-pink);
+  letter-spacing: 0.12em;
+  text-shadow: 0 0 10px var(--color-neon-pink);
+  margin-top: calc(-1 * var(--space-sm));
+}
+
+/* ハイスコアボックス */
+.highScoreBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: var(--space-sm) var(--space-xl);
+  border: 1px solid rgba(0, 245, 255, 0.25);
+  border-radius: 8px;
+  background: rgba(0, 245, 255, 0.04);
+}
+
+.highScoreLabel {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--color-text-dim);
+  text-transform: uppercase;
+}
+
+.highScoreValue {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-neon-gold);
+  text-shadow: 0 0 10px var(--color-neon-gold);
+}

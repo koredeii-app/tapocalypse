@@ -1,0 +1,25 @@
+/* コンテナ：画面全体を覆うが、タッチイベントは透過 */
+.container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 100;
+  overflow: hidden;
+}
+
+/* 💥 エフェクト要素 */
+.tapEffect {
+  position: absolute;
+  font-size: clamp(28px, 8vw, 40px);
+  line-height: 1;
+  pointer-events: none;
+  /* 中央基準に配置 */
+  transform: translate(-50%, -50%);
+  animation: tapBurst 0.5s ease-out forwards;
+}
+
+@keyframes tapBurst {
+  0%   { transform: translate(-50%, -50%) scale(0.4); opacity: 1; }
+  50%  { transform: translate(-50%, -70%) scale(1.2); opacity: 0.9; }
+  100% { transform: translate(-50%, -95%) scale(0.7); opacity: 0; }
+}

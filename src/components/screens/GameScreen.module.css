@@ -1,0 +1,107 @@
+.screen {
+  /* globals.css .screen を継承。flex-direction: column で header + main を縦並び */
+  justify-content: flex-start;
+}
+
+/* ─── ヘッダー ─── */
+.header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  width: 100%;
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(0, 0, 20, 0.75);
+  border-bottom: 1px solid rgba(0, 245, 255, 0.18);
+  backdrop-filter: blur(4px);
+  flex-shrink: 0;
+}
+
+.statBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.statBoxCenter {
+  border-left:  1px solid rgba(0, 245, 255, 0.15);
+  border-right: 1px solid rgba(0, 245, 255, 0.15);
+}
+
+.statLabel {
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  color: var(--color-text-dim);
+  text-transform: uppercase;
+}
+
+.statValue {
+  font-size: 1.65rem;
+  font-weight: 700;
+  color: var(--color-neon-cyan);
+  text-shadow: 0 0 8px var(--color-neon-cyan);
+  line-height: 1.2;
+  transition: color var(--anim-fast), text-shadow var(--anim-fast);
+}
+
+/* スコア値はゴールド */
+.scoreValue {
+  color: var(--color-neon-gold);
+  text-shadow: 0 0 8px var(--color-neon-gold);
+}
+
+/* 残り時間の警告状態（3秒以下） */
+.warning {
+  color: var(--color-danger) !important;
+  text-shadow: 0 0 10px var(--color-danger) !important;
+  animation: timerBlink 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes timerBlink {
+  from { opacity: 1; }
+  to   { opacity: 0.45; }
+}
+
+/* ─── タップエリア ─── */
+.tapArea {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+/* ─── 地球ターゲット ─── */
+.earth {
+  font-size: clamp(90px, 26vw, 150px);
+  line-height: 1;
+  pointer-events: none; /* タップはタップエリア全体で受け取る */
+  filter: drop-shadow(0 0 20px rgba(0, 200, 255, 0.4));
+  /* 常時: ゆっくり浮遊 */
+  animation: earthFloat 4s ease-in-out infinite;
+  transition: filter var(--anim-fast);
+}
+
+@keyframes earthFloat {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-12px); }
+  100% { transform: translateY(0); }
+}
+
+/* タップ時のバウンスアニメーション（JS で .earthTapping を付与） */
+.earthTapping {
+  animation: earthTap 0.2s ease-out forwards;
+}
+
+@keyframes earthTap {
+  0%   { transform: scale(1);    filter: drop-shadow(0 0 20px rgba(0, 200, 255, 0.4)); }
+  30%  { transform: scale(0.82); filter: drop-shadow(0 0 5px rgba(0, 200, 255, 0.2)); }
+  65%  { transform: scale(1.12); filter: drop-shadow(0 0 35px rgba(0, 245, 255, 0.9)); }
+  100% { transform: scale(1);    filter: drop-shadow(0 0 20px rgba(0, 200, 255, 0.4)); }
+}

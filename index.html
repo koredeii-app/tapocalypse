@@ -1,126 +1,22 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <meta name="theme-color" content="#0a0a1e">
-  <meta name="description" content="Tapocalypse - 世界を叩け！制限時間内にひたすらタップしてスコアを稼げ！">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0a0a1e" />
+  <meta name="description" content="Tapocalypse - 世界を叩け！" />
 
-  <!-- PWA メタタグ -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Tapocalypse">
-  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <!-- iOS PWA 対応 -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Tapocalypse" />
+  <link rel="apple-touch-icon" href="/tapocalypse/icons/icon-192.svg" />
 
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="css/style.css">
   <title>Tapocalypse</title>
 </head>
 <body>
-
-  <!-- ========== タイトル画面 ========== -->
-  <div id="screen-title" class="screen active">
-    <div class="stars-bg" aria-hidden="true"></div>
-    <div class="screen-content title-content">
-      <h1 class="game-title">Tapocalypse</h1>
-      <p class="subtitle">世界を叩け！</p>
-      <div class="high-score-box">
-        <span class="hs-label">BEST SCORE</span>
-        <span id="title-high-score" class="hs-value">0</span>
-      </div>
-      <button id="btn-start" class="btn-primary">START</button>
-    </div>
-  </div>
-
-  <!-- ========== カウントダウン画面 ========== -->
-  <div id="screen-countdown" class="screen">
-    <div class="stars-bg" aria-hidden="true"></div>
-    <div class="screen-content countdown-content">
-      <div id="countdown-number" class="countdown-number">3</div>
-      <div id="countdown-message" class="countdown-message">時間は10秒！</div>
-      <div id="countdown-flying" class="flying-alert hidden">
-        <span>フライング！</span>
-        <small>-1秒</small>
-      </div>
-    </div>
-  </div>
-
-  <!-- ========== ゲーム画面 ========== -->
-  <div id="screen-game" class="screen">
-    <div class="stars-bg" aria-hidden="true"></div>
-
-    <!-- ヘッダー：ステータス表示 -->
-    <header class="game-header">
-      <div class="stat-box">
-        <span class="stat-label">残り時間</span>
-        <span id="game-timer" class="stat-value timer-value">10</span>
-      </div>
-      <div class="stat-box stat-box--center">
-        <span class="stat-label">スコア</span>
-        <span id="game-score" class="stat-value score-value">0</span>
-      </div>
-      <div class="stat-box">
-        <span class="stat-label">BEST</span>
-        <span id="game-high-score" class="stat-value">0</span>
-      </div>
-    </header>
-
-    <!-- タップエリア -->
-    <main id="tap-area" class="tap-area">
-      <!-- 地球ターゲット（メイン） -->
-      <div id="earth-target" class="earth-target" role="button" aria-label="地球をタップ">🌍</div>
-
-      <!-- ボーナスターゲット表示コンテナ（pointer-events は各ターゲットで制御） -->
-      <div id="bonus-container" class="bonus-container" aria-hidden="true"></div>
-
-      <!-- タップエフェクト表示コンテナ（タッチを透過） -->
-      <div id="effect-container" class="effect-container" aria-hidden="true"></div>
-    </main>
-  </div>
-
-  <!-- ========== 結果画面 ========== -->
-  <div id="screen-result" class="screen">
-    <div class="stars-bg" aria-hidden="true"></div>
-    <div class="screen-content result-content">
-      <h1 class="game-title">Tapocalypse</h1>
-
-      <!-- ハイスコア更新バッジ -->
-      <div id="new-record-badge" class="new-record hidden">🏆 NEW RECORD!</div>
-
-      <div class="result-stats">
-        <div class="result-stat">
-          <span class="result-label">総タップ数</span>
-          <span id="result-taps" class="result-value">0</span>
-          <span class="result-unit">回</span>
-        </div>
-        <div class="result-stat result-stat--highlight">
-          <span class="result-label">獲得スコア</span>
-          <span id="result-score" class="result-value">0</span>
-          <span class="result-unit">pt</span>
-        </div>
-        <div class="result-stat">
-          <span class="result-label">BEST SCORE</span>
-          <span id="result-high-score" class="result-value">0</span>
-          <span class="result-unit">pt</span>
-        </div>
-      </div>
-
-      <button id="btn-retry" class="btn-primary">もう一度！</button>
-    </div>
-  </div>
-
-  <!-- ゲームロジック -->
-  <script src="js/game.js"></script>
-
-  <!-- Service Worker 登録 -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./service-worker.js')
-          .then(reg => console.log('[SW] 登録成功:', reg.scope))
-          .catch(err => console.warn('[SW] 登録失敗:', err));
-      });
-    }
-  </script>
+  <!-- React のマウントポイント -->
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
 </body>
 </html>

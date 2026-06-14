@@ -1,0 +1,53 @@
+.screen {
+  /* globals.css .screen を継承 */
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  text-align: center;
+}
+
+/* カウントダウン数字（key が変わるたびにアニメーション再生） */
+.number {
+  font-size: clamp(5rem, 26vw, 9rem);
+  font-weight: 900;
+  line-height: 1;
+  color: var(--color-neon-cyan);
+  text-shadow:
+    0 0 10px var(--color-neon-cyan),
+    0 0 30px var(--color-neon-cyan),
+    0 0 60px rgba(0, 245, 255, 0.5);
+  animation: countPop 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes countPop {
+  from { transform: scale(1.6); opacity: 0.3; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+/* メッセージ */
+.message {
+  font-size: 1.4rem;
+  color: var(--color-text);
+  letter-spacing: 0.06em;
+  min-height: 2rem;
+}
+
+/* フライング警告 */
+.flyingAlert {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--color-danger);
+  text-shadow: 0 0 12px var(--color-danger);
+  animation: flyingFlash 0.4s ease-out;
+}
+
+@keyframes flyingFlash {
+  0%   { transform: scale(1.4); opacity: 1; }
+  100% { transform: scale(1);   opacity: 1; }
+}
