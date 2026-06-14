@@ -60,11 +60,14 @@ export const GAME_CONFIG = Object.freeze({
   /** ハイスコアを保存する localStorage のキー */
   STORAGE_KEY: 'tapocalypse_high_score',
 
+  /** ミュート設定を保存する localStorage のキー */
+  SOUND_STORAGE_KEY: 'tapocalypse_muted',
+
   /** タイマー更新間隔（ms）。小さいほど滑らか */
   TIMER_INTERVAL_MS: 100,
 
   /** カウントダウン完了後、ゲーム開始までの待機時間（ms） */
-  COUNTDOWN_END_DELAY_MS: 600,
+  COUNTDOWN_END_DELAY_MS: 1000,
 });
 
 // ─────────────────────────────────────────────

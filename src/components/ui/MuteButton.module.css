@@ -1,0 +1,29 @@
+.button {
+  position: fixed;
+  top: calc(env(safe-area-inset-top, 0px) + 0.5rem);
+  right: var(--space-sm);
+  z-index: 200;
+
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 245, 255, 0.3);
+  background: rgba(0, 0, 20, 0.72);
+  backdrop-filter: blur(6px);
+
+  font-size: 1.1rem;
+  line-height: 1;
+  cursor: pointer;
+  touch-action: manipulation;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.button:active {
+  background: rgba(0, 245, 255, 0.15);
+  border-color: rgba(0, 245, 255, 0.7);
+}

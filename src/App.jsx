@@ -7,19 +7,24 @@
  * 将来のモード選択画面や設定画面もここに追加する。
  */
 
-import { useGame } from './hooks/useGame';
-import { SCREENS } from './game/config';
+import { useGame }  from './hooks/useGame';
+import { useSound } from './hooks/useSound';
+import { SCREENS }  from './game/config';
 
 import TitleScreen     from './components/screens/TitleScreen';
 import CountdownScreen from './components/screens/CountdownScreen';
 import GameScreen      from './components/screens/GameScreen';
 import ResultScreen    from './components/screens/ResultScreen';
+import MuteButton      from './components/ui/MuteButton';
 
 function App() {
-  const game = useGame();
+  const game  = useGame();
+  const sound = useSound();
 
   return (
     <>
+      <MuteButton muted={sound.muted} onToggle={sound.toggleMute} />
+
       {/* 全画面を DOM に保持し、visible prop で表示・非表示を切り替える。
           CSS transition で滑らかにフェードイン/アウトする。 */}
 

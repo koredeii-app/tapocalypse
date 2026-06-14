@@ -114,6 +114,9 @@ function GameScreen({ visible, score, timeLeft, highScore, onTap }) {
         >
           🌍
         </div>
+
+        {/* ゲーム開始アナウンス（visible が変わるたびに再アニメーション） */}
+        <div key={visible} className={styles.tapBanner}>TAP!!</div>
       </main>
 
       {/* 💥 エフェクトレイヤー（pointer-events: none） */}

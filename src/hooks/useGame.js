@@ -11,6 +11,7 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { SCREENS, GAME_CONFIG, COUNTDOWN_MESSAGES } from '../game/config';
 import { GameEngine } from '../game/GameEngine';
 import { useStorage } from './useStorage';
+import { SoundManager } from '../audio/SoundManager';
 
 export function useGame() {
   // ─────────────────────────────────────────────
@@ -69,6 +70,7 @@ export function useGame() {
     const result    = engine.stop();
     const newRecord = saveHighScore(result.score);
 
+    SoundManager.playResult();
     setResultData({ ...result, isNewRecord: newRecord });
     setScreen(SCREENS.RESULT);
   }, [saveHighScore]);
@@ -160,8 +162,8 @@ export function useGame() {
 
     const result = engine.tap();
     if (result.isValid) {
-      // React の state 更新（レンダリングをトリガー）
       setScore(engine.score);
+      SoundManager.playTap();
     }
     return result;
   }, []);
