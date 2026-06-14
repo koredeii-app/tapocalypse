@@ -120,15 +120,13 @@ export function useGame() {
 
     timers.current.countdown = setInterval(() => {
       count--;
-
-      if (count <= 0) {
-        clearInterval(timers.current.countdown);
-        // 「1 / 世界を叩け！」を少し見せてからゲーム開始
-        setTimeout(() => startGameRef.current(), GAME_CONFIG.COUNTDOWN_END_DELAY_MS);
-        return;
-      }
-
       setCountdownValue(count);
+
+      if (count <= 1) {
+        // 「1 / 世界を叩け！」を少し見せてからゲーム開始
+        clearInterval(timers.current.countdown);
+        setTimeout(() => startGameRef.current(), GAME_CONFIG.COUNTDOWN_END_DELAY_MS);
+      }
     }, 1000);
   }, [clearAllTimers]);
 

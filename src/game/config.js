@@ -64,7 +64,7 @@ export const GAME_CONFIG = Object.freeze({
   TIMER_INTERVAL_MS: 100,
 
   /** カウントダウン完了後、ゲーム開始までの待機時間（ms） */
-  COUNTDOWN_END_DELAY_MS: 000,
+  COUNTDOWN_END_DELAY_MS: 600,
 });
 
 // ─────────────────────────────────────────────
