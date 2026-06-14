@@ -53,8 +53,13 @@ export default defineConfig({
 
       // Workbox（Service Worker）設定
       workbox: {
-        // キャッシュ対象ファイル
         globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2}'],
+        // 新しい SW を即座にアクティブ化（待機をスキップ）
+        skipWaiting: true,
+        // アクティブ化した SW が既存ページをすぐ制御する
+        clientsClaim: true,
+        // 古いキャッシュを自動削除
+        cleanupOutdatedCaches: true,
       },
     }),
   ],
