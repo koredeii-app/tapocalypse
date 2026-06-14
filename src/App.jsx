@@ -1,10 +1,5 @@
 /**
  * App - ルートコンポーネント
- *
- * useGame フックでゲーム状態を一元管理し、
- * 各スクリーンコンポーネントへ props として渡す。
- *
- * 将来のモード選択画面や設定画面もここに追加する。
  */
 
 import { useGame }  from './hooks/useGame';
@@ -16,6 +11,7 @@ import CountdownScreen from './components/screens/CountdownScreen';
 import GameScreen      from './components/screens/GameScreen';
 import ResultScreen    from './components/screens/ResultScreen';
 import MuteButton      from './components/ui/MuteButton';
+import LangButton      from './components/ui/LangButton';
 
 function App() {
   const game  = useGame();
@@ -23,10 +19,8 @@ function App() {
 
   return (
     <>
+      <LangButton />
       <MuteButton muted={sound.muted} onToggle={sound.toggleMute} />
-
-      {/* 全画面を DOM に保持し、visible prop で表示・非表示を切り替える。
-          CSS transition で滑らかにフェードイン/アウトする。 */}
 
       <TitleScreen
         visible={game.screen === SCREENS.TITLE}
@@ -37,7 +31,6 @@ function App() {
       <CountdownScreen
         visible={game.screen === SCREENS.COUNTDOWN}
         countdownValue={game.countdownValue}
-        countdownMessage={game.countdownMessage}
         showFlying={game.showFlying}
         onTap={game.handleFlying}
       />

@@ -63,6 +63,9 @@ export const GAME_CONFIG = Object.freeze({
   /** ミュート設定を保存する localStorage のキー */
   SOUND_STORAGE_KEY: 'tapocalypse_muted',
 
+  /** 言語設定を保存する localStorage のキー */
+  LANG_STORAGE_KEY: 'tapocalypse_lang',
+
   /** タイマー更新間隔（ms）。小さいほど滑らか */
   TIMER_INTERVAL_MS: 100,
 
@@ -70,13 +73,4 @@ export const GAME_CONFIG = Object.freeze({
   COUNTDOWN_END_DELAY_MS: 1000,
 });
 
-// ─────────────────────────────────────────────
-// カウントダウンメッセージ
-// ─────────────────────────────────────────────
-
-/** カウントダウン数字に対応する表示メッセージ */
-export const COUNTDOWN_MESSAGES = Object.freeze({
-  3: '時間は10秒！',
-  2: 'さぁ！',
-  1: '世界を叩け！',
-});
+// カウントダウンメッセージは src/locales/ で管理（countdown3 / countdown2 / countdown1 キー）

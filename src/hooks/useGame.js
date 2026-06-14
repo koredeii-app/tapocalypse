@@ -8,7 +8,7 @@
  */
 
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { SCREENS, GAME_CONFIG, COUNTDOWN_MESSAGES } from '../game/config';
+import { SCREENS, GAME_CONFIG } from '../game/config';
 import { GameEngine } from '../game/GameEngine';
 import { useStorage } from './useStorage';
 import { SoundManager } from '../audio/SoundManager';
@@ -186,7 +186,6 @@ export function useGame() {
     // 状態
     screen,
     countdownValue,
-    countdownMessage: COUNTDOWN_MESSAGES[countdownValue] ?? '',
     showFlying,
     score,
     timeLeft,
