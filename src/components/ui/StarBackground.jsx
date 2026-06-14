@@ -1,54 +1,54 @@
 /**
- * StarBackground - 宇宙の星空を描画するコンポーネント
+ * StarBackground → PrimordialBackground
  *
- * 親要素の全面を覆うように配置する。
- * 星は useEffect で DOM 要素として動的生成し、CSS アニメーションで瞬く。
- *
- * pointer-events: none なので、ゲームのタップを妨げない。
+ * 原始の地球を漂う気泡・胞子・バイオルミネッセント粒子を生成する。
+ * 将来フェーズが進むにつれ、パーティクルの色・挙動を時代に合わせて変化させる。
  */
 
 import { useEffect, useRef } from 'react';
 import styles from './StarBackground.module.css';
 
-/**
- * @param {{ count?: number }} props
- *   count - 生成する星の数（デフォルト 70）
- */
-function StarBackground({ count = 70 }) {
+// 原始生命の色パレット（溶岩・バイオルミネッセンス・深海）
+const PARTICLE_COLORS = [
+  '#ff8c00',  // 琥珀・火山
+  '#ff6600',  // 深いオレンジ
+  '#ffaa00',  // 黄金
+  '#5dff6e',  // バイオルミネッセント緑
+  '#00e87a',  // エメラルド
+  '#00c8a0',  // 深海ティール
+];
+
+function StarBackground({ count = 60 }) {
   const containerRef = useRef(null);
 
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
 
-    // 星を生成して追加
     for (let i = 0; i < count; i++) {
-      const star = document.createElement('div');
-      star.className = 'star'; // globals.css のグローバルクラス
+      const p = document.createElement('div');
+      p.className = 'particle';
 
-      // ランダムな位置
-      star.style.left = `${Math.random() * 100}%`;
-      star.style.top  = `${Math.random() * 100}%`;
+      p.style.left = `${Math.random() * 100}%`;
+      p.style.top  = `${Math.random() * 100}%`;
 
-      // サイズ（大きい星は少なめ）
-      const size = Math.random() > 0.85
-        ? `${(Math.random() * 2 + 2).toFixed(1)}px`
-        : `${(Math.random() * 1.5 + 0.5).toFixed(1)}px`;
-      star.style.width  = size;
-      star.style.height = size;
+      // 気泡らしく大きめの粒子を少し多めに
+      const size = Math.random() > 0.7
+        ? `${(Math.random() * 4 + 3).toFixed(1)}px`
+        : `${(Math.random() * 2 + 1).toFixed(1)}px`;
+      p.style.width  = size;
+      p.style.height = size;
 
-      // CSS カスタムプロパティでアニメーションをランダム化
-      star.style.setProperty('--star-opacity',   (0.3 + Math.random() * 0.7).toFixed(2));
-      star.style.setProperty('--anim-duration',  `${(2 + Math.random() * 4).toFixed(1)}s`);
-      star.style.setProperty('--anim-delay',     `${(Math.random() * 5).toFixed(1)}s`);
+      const color = PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)];
+      p.style.setProperty('--particle-color',   color);
+      p.style.setProperty('--particle-opacity', (0.25 + Math.random() * 0.55).toFixed(2));
+      p.style.setProperty('--anim-duration',    `${(3 + Math.random() * 6).toFixed(1)}s`);
+      p.style.setProperty('--anim-delay',       `${(Math.random() * 6).toFixed(1)}s`);
 
-      container.appendChild(star);
+      container.appendChild(p);
     }
 
-    // アンマウント時に星を削除
-    return () => {
-      container.innerHTML = '';
-    };
+    return () => { container.innerHTML = ''; };
   }, [count]);
 
   return <div ref={containerRef} className={styles.container} aria-hidden="true" />;

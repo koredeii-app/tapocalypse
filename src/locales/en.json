@@ -1,6 +1,6 @@
 {
   "appName":     "Tapocalypse",
-  "tagline":     "Tap the World!",
+  "tagline":     "Create the World!",
   "start":       "START",
   "bestScore":   "BEST SCORE",
   "timeLeft":    "TIME",
@@ -13,5 +13,5 @@
   "flying":      "TOO EARLY!",
   "countdown3":  "10 seconds!",
   "countdown2":  "Ready!",
-  "countdown1":  "Tap the World!"
+  "countdown1":  "Create Life!"
 }

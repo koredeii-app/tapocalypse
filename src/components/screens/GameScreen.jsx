@@ -67,7 +67,7 @@ function GameScreen({ visible, score, timeLeft, highScore, onTap }) {
         style={{ touchAction: 'none' }}
       >
         <div ref={earthRef} className={styles.earth} aria-label="タップターゲット">
-          🌍
+          🌑
         </div>
 
         <div key={visible} className={styles.tapBanner}>TAP!!</div>

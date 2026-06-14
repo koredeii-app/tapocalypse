@@ -10,20 +10,20 @@
    data-theme 属性などで切り替えられる
 ───────────────────────────────────────────── */
 :root {
-  /* 背景色 */
-  --color-bg:        #0a0a1e;
-  --color-bg-2:      #0d0d2b;
+  /* 背景色（原始の深海・マグマ） */
+  --color-bg:        #080c07;
+  --color-bg-2:      #0b100a;
 
-  /* ネオンカラー */
-  --color-neon-cyan:  #00f5ff;
-  --color-neon-pink:  #ff00cc;
-  --color-neon-gold:  #ffd700;
-  --color-neon-green: #39ff14;
+  /* アクセントカラー（原始生命・火山・バイオルミネッセンス） */
+  --color-neon-cyan:  #ff8c00;   /* 琥珀・溶岩オレンジ（主役） */
+  --color-neon-pink:  #ff5500;   /* 深いオレンジ */
+  --color-neon-gold:  #5dff6e;   /* バイオルミネッセント緑 */
+  --color-neon-green: #39ff80;   /* 生命の緑 */
 
   /* テキスト */
-  --color-text:       #e0e0ff;
-  --color-text-dim:   #8888aa;
-  --color-danger:     #ff3355;
+  --color-text:       #e8dfc0;   /* 温かみあるクリーム */
+  --color-text-dim:   #7a7060;   /* 暖色ディム */
+  --color-danger:     #ff3300;   /* 溶岩レッド */
 
   /* フォント */
   --font-base: system-ui, -apple-system, 'Helvetica Neue', sans-serif;
@@ -96,21 +96,24 @@ html, body {
 }
 
 /* ─────────────────────────────────────────────
-   星アニメーション（StarBackground コンポーネントで使用）
+   原始パーティクル（StarBackground コンポーネントで使用）
+   気泡・胞子・バイオルミネッセント粒子
 ───────────────────────────────────────────── */
-.star {
+.particle {
   position: absolute;
   border-radius: 50%;
-  background: #ffffff;
-  animation: twinkle var(--anim-duration, 3s) ease-in-out infinite alternate;
+  background: var(--particle-color, #ff8c00);
+  box-shadow: 0 0 6px 1px var(--particle-color, #ff8c00);
+  animation: particleFloat var(--anim-duration, 5s) ease-in-out infinite;
   animation-delay: var(--anim-delay, 0s);
-  opacity: var(--star-opacity, 0.6);
+  opacity: var(--particle-opacity, 0.5);
   pointer-events: none;
 }
 
-@keyframes twinkle {
-  from { opacity: var(--star-opacity, 0.6); }
-  to   { opacity: calc(var(--star-opacity, 0.6) * 0.15); }
+@keyframes particleFloat {
+  0%   { transform: translateY(0)     scale(1);    opacity: var(--particle-opacity, 0.5); }
+  40%  { transform: translateY(-18px) scale(1.15); opacity: calc(var(--particle-opacity, 0.5) * 1.4); }
+  100% { transform: translateY(0)     scale(1);    opacity: var(--particle-opacity, 0.5); }
 }
 
 /* ─────────────────────────────────────────────

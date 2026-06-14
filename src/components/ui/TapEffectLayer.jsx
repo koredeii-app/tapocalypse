@@ -30,7 +30,7 @@ const TapEffectLayer = forwardRef(function TapEffectLayer(_, ref) {
       const el = document.createElement('div');
       // CSS Modules のクラス名（ハッシュ付き）を設定
       el.className = styles.tapEffect;
-      el.textContent = '💥';
+      el.textContent = '✨';
       el.style.left = `${x}px`;
       el.style.top  = `${y}px`;
       container.appendChild(el);
