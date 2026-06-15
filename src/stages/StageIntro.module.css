@@ -1,0 +1,94 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(6px);
+  z-index: 200;
+  animation: fadeIn 0.3s ease;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 36px 28px 32px;
+  max-width: 340px;
+  width: 90%;
+  background: rgba(10, 10, 20, 0.95);
+  border: 1px solid rgba(109, 204, 94, 0.25);
+  border-radius: 20px;
+  box-shadow: 0 0 40px rgba(109, 204, 94, 0.1);
+}
+
+.stageLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-dim);
+}
+
+.emoji {
+  font-size: 3.5rem;
+  line-height: 1;
+  filter: drop-shadow(0 0 16px rgba(255, 255, 255, 0.4));
+}
+
+.title {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--color-neon-cyan);
+  text-shadow: 0 0 16px var(--color-neon-cyan);
+  letter-spacing: 0.08em;
+}
+
+.description {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--color-text);
+  text-align: center;
+  margin: 0;
+}
+
+.hintBox,
+.conditionBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.hintLabel,
+.conditionLabel {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-text-dim);
+}
+
+.hintText {
+  font-size: 0.88rem;
+  color: var(--color-neon-gold);
+  text-align: center;
+}
+
+.conditionText {
+  font-size: 0.88rem;
+  color: var(--color-text);
+  text-align: center;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}

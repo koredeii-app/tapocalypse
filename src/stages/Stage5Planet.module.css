@@ -1,0 +1,116 @@
+.stage {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 60%, #061008 0%, #010a08 50%, #000 100%);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* 惑星コンテナ（スケール変換の中心） */
+.planetContainer {
+  transform-origin: center center;
+  transition: transform 0.05s linear;
+}
+
+/* 惑星本体 */
+.planet {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  background-image:
+    radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.18) 0%, transparent 42%),
+    repeating-linear-gradient(
+      55deg,
+      #1a5e2a 0px, #1a5e2a 25px,
+      #1565c0 25px, #1565c0 50px,
+      #2e7d32 50px, #2e7d32 75px,
+      #0d47a1 75px, #0d47a1 100px
+    );
+  background-size: 100% 100%, 400px 100%;
+  background-position: 0 0, var(--bg-offset, 0px) 0;
+  box-shadow:
+    inset -30px -30px 60px rgba(0, 0, 0, 0.7),
+    inset 8px 8px 24px rgba(255, 255, 255, 0.04),
+    0 0 50px rgba(30, 100, 50, 0.35),
+    0 0 100px rgba(20, 60, 30, 0.15);
+}
+
+/* 生命の種 */
+.seed {
+  position: absolute;
+  left: 38%;
+  top: 32%;
+  font-size: 1.6rem;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  filter: drop-shadow(0 0 8px rgba(100, 220, 100, 0.9));
+  animation: seedPulse 1.2s ease-in-out infinite;
+  z-index: 5;
+}
+
+.seed.seedCollected {
+  animation: seedCollect 0.8s ease-out forwards;
+}
+
+@keyframes seedPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1);    filter: drop-shadow(0 0 6px rgba(100, 220, 100, 0.8)); }
+  50%       { transform: translate(-50%, -50%) scale(1.2);  filter: drop-shadow(0 0 16px rgba(150, 255, 150, 1.0)); }
+}
+
+@keyframes seedCollect {
+  0%   { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+  50%  { transform: translate(-50%, -50%) scale(3);   opacity: 1; }
+  100% { transform: translate(-50%, -50%) scale(0);   opacity: 0; }
+}
+
+/* ズームインジケーター（右下） */
+.zoomIndicator {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 6px 14px;
+  pointer-events: none;
+}
+
+.zoomIcon {
+  font-size: 1rem;
+}
+
+.zoomValue {
+  font-size: 0.9rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: rgba(200, 255, 200, 0.8);
+}
+
+/* 状態ヒント（下部中央） */
+.statusHint {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-right: 80px; /* ズームインジケーターと被らないよう */
+  font-size: 0.88rem;
+  color: rgba(150, 220, 150, 0.6);
+  pointer-events: none;
+  white-space: nowrap;
+  animation: hintPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes hintPulse {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1; }
+}

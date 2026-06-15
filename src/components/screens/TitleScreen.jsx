@@ -7,7 +7,7 @@ import StarBackground from '../ui/StarBackground';
 import NeonButton from '../ui/NeonButton';
 import styles from './TitleScreen.module.css';
 
-function TitleScreen({ visible, currentStage, onStart }) {
+function TitleScreen({ visible, onStart }) {
   const { t } = useI18n();
 
   return (
@@ -17,11 +17,6 @@ function TitleScreen({ visible, currentStage, onStart }) {
       <div className={styles.content}>
         <h1 className={styles.title}>{t('appName')}</h1>
         <p  className={styles.subtitle}>{t('tagline')}</p>
-
-        <div className={styles.highScoreBox}>
-          <span className={styles.highScoreLabel}>{t('stage')}</span>
-          <span className={styles.highScoreValue}>{currentStage}</span>
-        </div>
 
         <NeonButton onClick={onStart}>{t('start')}</NeonButton>
       </div>

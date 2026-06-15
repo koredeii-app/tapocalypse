@@ -1,0 +1,89 @@
+.stage {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, #0a0a20 0%, #020212 60%, #000 100%);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  overflow: hidden;
+}
+
+/* 軌道リング（中央に絶対配置） */
+.orbitRing {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 2px dashed rgba(180, 180, 255, 0.3);
+  box-shadow:
+    0 0 12px rgba(150, 150, 255, 0.1),
+    inset 0 0 12px rgba(150, 150, 255, 0.05);
+  pointer-events: none;
+  animation: ringPulse 3s ease-in-out infinite;
+}
+
+@keyframes ringPulse {
+  0%, 100% { border-color: rgba(180, 180, 255, 0.25); }
+  50%       { border-color: rgba(180, 180, 255, 0.5); }
+}
+
+/* 恒星（中央固定） */
+.star {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 56px;
+  pointer-events: none;
+  filter: drop-shadow(0 0 20px rgba(255, 220, 50, 0.8));
+  animation: starGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes starGlow {
+  from { filter: drop-shadow(0 0 15px rgba(255, 220, 50, 0.6)); }
+  to   { filter: drop-shadow(0 0 30px rgba(255, 220, 50, 1.0)); }
+}
+
+/* 惑星（ドラッグ可能） */
+.planet {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-size: 40px;
+  cursor: grab;
+  touch-action: none;
+  filter: drop-shadow(0 0 8px rgba(50, 150, 255, 0.5));
+  transition: filter 0.15s, transform 0.15s;
+  z-index: 10;
+}
+
+.planet:active,
+.planet.dragging {
+  cursor: grabbing;
+  filter: drop-shadow(0 0 16px rgba(100, 200, 255, 0.9));
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+.planet.orbiting {
+  cursor: default;
+  filter: drop-shadow(0 0 20px rgba(50, 200, 100, 0.8));
+}
+
+/* ヒント */
+.hint {
+  position: absolute;
+  bottom: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.95rem;
+  color: rgba(180, 180, 255, 0.5);
+  pointer-events: none;
+  text-align: center;
+  line-height: 1.6;
+  animation: hintPulse 2.5s ease-in-out infinite;
+}
+
+@keyframes hintPulse {
+  0%, 100% { opacity: 0.3; }
+  50%       { opacity: 0.8; }
+}

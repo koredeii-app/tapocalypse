@@ -1,0 +1,91 @@
+.stage {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 30% 70%, #050d20 0%, #030818 50%, #010510 100%);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+/* 物質パーティクル */
+.particle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  background: radial-gradient(circle, #a0b8e0 0%, #4060a0 60%, transparent 100%);
+  box-shadow: 0 0 4px rgba(100, 140, 220, 0.6);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.particle.collected {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(2.5);
+  box-shadow: 0 0 16px rgba(150, 200, 255, 0.9);
+}
+
+/* 収集カウンター */
+.counter {
+  position: absolute;
+  top: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  pointer-events: none;
+}
+
+.countNum {
+  font-size: 2.4rem;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  color: #7bb8f0;
+  text-shadow: 0 0 14px rgba(100, 160, 240, 0.8);
+}
+
+.countDivider {
+  display: none;
+}
+
+.countTotal {
+  display: none;
+}
+
+.progressBar {
+  width: 120px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(90deg, #4080d0, #a0d0ff);
+  border-radius: 2px;
+  transition: width 0.15s ease-out;
+  box-shadow: 0 0 6px rgba(100, 160, 255, 0.7);
+}
+
+.hint {
+  position: absolute;
+  bottom: 40%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1rem;
+  color: rgba(150, 190, 240, 0.5);
+  pointer-events: none;
+  white-space: nowrap;
+  animation: hintPulse 2s ease-in-out infinite;
+}
+
+@keyframes hintPulse {
+  0%, 100% { opacity: 0.3; }
+  50%       { opacity: 0.9; }
+}
