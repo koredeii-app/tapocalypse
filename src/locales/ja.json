@@ -1,17 +1,23 @@
 {
   "appName":     "Tapocalypse",
-  "tagline":     "大地に命を宿せ！",
+  "tagline":     "世界に命を宿せ！",
   "start":       "スタート",
   "stage":       "ステージ",
   "creation":    "創造",
   "destruction": "破壊",
   "total":       "合計",
+  "score":       "スコア",
   "timeLeft":    "残り時間",
+  "multiplier":  "倍率",
+  "stageUp":     "ステージアップ！",
+  "gameOver":    "ゲームオーバー",
+  "reachedStage": "到達ステージ",
+  "playTime":    "プレイ時間",
   "newRecord":   "🏆 新記録！",
   "playAgain":   "もう一度！",
   "backToTitle": "タイトルへ",
   "flying":      "フライング！",
-  "countdown3":  "時間は10秒！",
+  "countdown3":  "世界を作れ！",
   "countdown2":  "さぁ！",
-  "countdown1":  "育て！"
+  "countdown1":  "タップ！"
 }

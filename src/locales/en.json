@@ -1,17 +1,23 @@
 {
   "appName":     "Tapocalypse",
-  "tagline":     "Give Life to the Earth!",
+  "tagline":     "Give Life to the World!",
   "start":       "START",
   "stage":       "STAGE",
   "creation":    "CREATE",
   "destruction": "DESTROY",
   "total":       "TOTAL",
+  "score":       "SCORE",
   "timeLeft":    "TIME",
+  "multiplier":  "MULT",
+  "stageUp":     "STAGE UP!",
+  "gameOver":    "GAME OVER",
+  "reachedStage": "REACHED",
+  "playTime":    "TIME PLAYED",
   "newRecord":   "🏆 NEW RECORD!",
   "playAgain":   "PLAY AGAIN",
   "backToTitle": "TITLE",
   "flying":      "TOO EARLY!",
-  "countdown3":  "10 seconds!",
+  "countdown3":  "Create the World!",
   "countdown2":  "Ready!",
-  "countdown1":  "Let it Grow!"
+  "countdown1":  "TAP!"
 }

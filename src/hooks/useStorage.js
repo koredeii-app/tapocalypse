@@ -2,7 +2,6 @@
  * useStorage - データ永続化ユーティリティ
  *
  * loadSave / persistSave: ゲームセーブデータの読み書き（フック非依存）
- * useSound: ミュート設定（後方互換）
  */
 
 import { useState, useCallback } from 'react';
@@ -32,27 +31,6 @@ export function persistSave(data) {
   try {
     localStorage.setItem(GAME_CONFIG.SAVE_KEY, JSON.stringify(data));
   } catch (_) {}
-}
-
-// ─────────────────────────────────────────────
-// ミュート設定（フック）
-// ─────────────────────────────────────────────
-
-export function useSound() {
-  const [muted, setMuted] = useState(() => {
-    const saved = localStorage.getItem(GAME_CONFIG.SOUND_STORAGE_KEY);
-    return saved === 'true';
-  });
-
-  const toggleMute = useCallback(() => {
-    setMuted(prev => {
-      const next = !prev;
-      localStorage.setItem(GAME_CONFIG.SOUND_STORAGE_KEY, String(next));
-      return next;
-    });
-  }, []);
-
-  return { muted, toggleMute };
 }
 
 // ─────────────────────────────────────────────

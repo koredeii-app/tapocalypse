@@ -1,31 +1,39 @@
 /**
  * GameScreen — ゲーム画面
  *
- * 元のタップUI（🌱 タップエリア）を基本とし、
- * 上部に 創造/破壊 の属性切替ボタンを追加。
- * 属性ボタンのタップは onModeChange のみ呼ばれ、ゲームタップには加算されない。
+ * レイアウト:
+ *   ─ ヘッダー（ステージ・スコア・倍率・残り時間・進捗バー）
+ *   ─ タップエリア（全画面）
+ *   ─ ステージアップ通知（オーバーレイ）
+ *   ─ 属性切替ボタン（下部固定）
+ *
+ * 全画面タップを実現するため、onPointerDown を最外 div に設定する。
+ * 下部ボタンは stopPropagation でスコア加算をブロックする。
  */
 
 import { useRef, useCallback } from 'react';
-import { useI18n } from '../../hooks/useI18n';
 import StarBackground from '../ui/StarBackground';
 import TapEffectLayer from '../ui/TapEffectLayer';
 import styles from './GameScreen.module.css';
 
 function GameScreen({
   visible,
-  tapMode,
-  creationPoints,
-  destructionPoints,
-  totalPoints,
+  score,
+  currentStage,
+  stageName,
+  stageEmoji,
+  multiplier,
   timeLeft,
+  tapMode,
+  stageUpNotify,
+  currentThreshold,
+  nextThreshold,
   onTap,
   onModeChange,
 }) {
-  const { t } = useI18n();
   const tapEffectRef = useRef(null);
 
-  // タップエリア全体の PointerDown — 属性ボタン以外で発火
+  // 全画面ポインターダウン → スコア加算
   const handlePointerDown = useCallback((e) => {
     const result = onTap?.();
     if (result?.isValid && tapEffectRef.current) {
@@ -33,70 +41,89 @@ function GameScreen({
     }
   }, [onTap, tapMode]);
 
-  // 属性切替ボタン — stopPropagation でタップに加算させない
+  // 属性ボタン → stopPropagation でスコア加算をブロック
   const handleModePointerDown = useCallback((e, mode) => {
     e.stopPropagation();
     onModeChange?.(mode);
   }, [onModeChange]);
 
   const timeDisplay = Math.ceil(timeLeft);
+  const progress = nextThreshold != null
+    ? Math.min(100, Math.max(0, ((score - currentThreshold) / (nextThreshold - currentThreshold)) * 100))
+    : 100;
 
   return (
-    <div className={`screen ${visible ? 'active' : ''} ${styles.screen}`}>
+    <div
+      className={`screen ${visible ? 'active' : ''} ${styles.screen}`}
+      onPointerDown={handlePointerDown}
+    >
       <StarBackground />
 
-      {/* ─── 属性切替 ─── */}
-      <div className={styles.modeToggle}>
+      {/* ─── ヘッダー ─── */}
+      <div className={styles.header}>
+        <div className={styles.stageRow}>
+          <span className={styles.stageNum}>Stage {currentStage}</span>
+          <span className={styles.stageName}>{stageName}</span>
+        </div>
+
+        <div className={styles.statsRow}>
+          <div className={styles.stat}>
+            <span className={styles.statLabel}>SCORE</span>
+            <span className={styles.statValue}>{score.toLocaleString()}</span>
+          </div>
+          <div className={styles.stat}>
+            <span className={styles.statLabel}>MULT</span>
+            <span className={`${styles.statValue} ${styles.multiplierValue}`}>x{multiplier}</span>
+          </div>
+          <div className={styles.stat}>
+            <span className={styles.statLabel}>TIME</span>
+            <span className={`${styles.statValue} ${timeDisplay <= 3 ? styles.danger : ''}`}>
+              {timeDisplay}
+            </span>
+          </div>
+        </div>
+
+        {/* 次ステージへの進捗バー */}
+        <div className={styles.progressTrack}>
+          <div className={styles.progressFill} style={{ width: `${progress}%` }} />
+        </div>
+      </div>
+
+      {/* ─── タップエリア（中央絵文字） ─── */}
+      <div className={styles.tapArea}>
+        <div className={`${styles.emojiWrap} ${tapMode === 'destruction' ? styles.destructMode : ''}`}>
+          <div className={styles.emojiGlow} />
+          <div className={styles.emoji}>{stageEmoji}</div>
+        </div>
+        <TapEffectLayer ref={tapEffectRef} />
+      </div>
+
+      {/* ─── ステージアップ通知 ─── */}
+      {stageUpNotify && (
+        <div className={styles.stageUpOverlay}>
+          <div className={styles.stageUpBadge}>
+            <span className={styles.stageUpLabel}>ステージアップ！</span>
+            <span className={styles.stageUpName}>{stageUpNotify.name}</span>
+          </div>
+        </div>
+      )}
+
+      {/* ─── 属性切替ボタン（下部） ─── */}
+      <div className={styles.modeBar}>
         <button
           className={`${styles.modeBtn} ${styles.modeBtnCreate} ${tapMode === 'creation' ? styles.active : ''}`}
           onPointerDown={e => handleModePointerDown(e, 'creation')}
         >
           <span className={styles.modeIcon}>✨</span>
-          <span className={styles.modeLabel}>{t('creation')}</span>
+          <span className={styles.modeLabel}>創造</span>
         </button>
         <button
           className={`${styles.modeBtn} ${styles.modeBtnDestroy} ${tapMode === 'destruction' ? styles.active : ''}`}
           onPointerDown={e => handleModePointerDown(e, 'destruction')}
         >
           <span className={styles.modeIcon}>💀</span>
-          <span className={styles.modeLabel}>{t('destruction')}</span>
+          <span className={styles.modeLabel}>破壊</span>
         </button>
-      </div>
-
-      {/* ─── ヘッダー（スコア表示） ─── */}
-      <div className={styles.header}>
-        <div className={styles.stat}>
-          <span className={styles.statLabel}>{t('timeLeft')}</span>
-          <span className={`${styles.statValue} ${timeDisplay <= 3 ? styles.danger : ''}`}>
-            {timeDisplay}
-          </span>
-        </div>
-        <div className={styles.stat}>
-          <span className={styles.statLabel}>{t('creation')}</span>
-          <span className={`${styles.statValue} ${styles.creation}`}>
-            {creationPoints}
-          </span>
-        </div>
-        <div className={styles.stat}>
-          <span className={styles.statLabel}>{t('destruction')}</span>
-          <span className={`${styles.statValue} ${styles.destruction}`}>
-            {destructionPoints}
-          </span>
-        </div>
-        <div className={styles.stat}>
-          <span className={styles.statLabel}>{t('total')}</span>
-          <span className={styles.statValue}>{totalPoints}</span>
-        </div>
-      </div>
-
-      {/* ─── タップエリア ─── */}
-      <div className={styles.tapArea} onPointerDown={handlePointerDown}>
-        <div className={`${styles.earthWrap} ${tapMode === 'destruction' ? styles.earthDestructMode : ''}`}>
-          <div className={styles.earthGlow} />
-          <div className={styles.earth}>🌱</div>
-        </div>
-
-        <TapEffectLayer ref={tapEffectRef} />
       </div>
     </div>
   );

@@ -182,13 +182,13 @@ export function useGame() {
       stageRef.current = newStageInfo.stage;
       setCurrentStage(newStageInfo.stage);
 
-      // 残り時間持ち越し（現在の残り + 新ステージの制限時間）
-      engine.addTime(GAME_CONFIG.STAGE_DURATION);
+      // 残り時間持ち越し（現在の残り時間をそのまま加算 = 残り × 2）
+      engine.addTime(engine.getTimeLeft());
 
       // ステージアップ通知
       setStageUpNotify({ stage: newStageInfo.stage, name: newStageInfo.name });
       clearTimeout(timers.current.notify);
-      timers.current.notify = setTimeout(() => setStageUpNotify(null), 2000);
+      timers.current.notify = setTimeout(() => setStageUpNotify(null), 1000);
 
       // 中間セーブ
       persistSave({

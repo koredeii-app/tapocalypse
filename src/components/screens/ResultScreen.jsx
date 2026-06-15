@@ -1,64 +1,59 @@
 /**
  * ResultScreen - ゲーム結果画面
  *
- * セッションの 創造/破壊/合計 と累計ステージを表示する。
+ * 表示: 到達ステージ / 到達スコア / プレイ時間
  */
 
-import { useI18n } from '../../hooks/useI18n';
 import StarBackground from '../ui/StarBackground';
 import NeonButton from '../ui/NeonButton';
 import styles from './ResultScreen.module.css';
 
-function ResultScreen({ visible, resultData, onRetry, onTitle }) {
-  const { t } = useI18n();
+function formatTime(seconds) {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return m > 0 ? `${m}分${s}秒` : `${s}秒`;
+}
 
+function ResultScreen({ visible, resultData, onRetry, onTitle }) {
   if (!resultData) return null;
 
-  const { creationPoints, destructionPoints, totalPoints, currentStage } = resultData;
+  const { score, stage, stageName, playTime } = resultData;
 
   return (
     <div className={`screen ${visible ? 'active' : ''} ${styles.screen}`}>
       <StarBackground />
 
       <div className={styles.content}>
-        <h1 className={styles.title}>{t('appName')}</h1>
+        <h1 className={styles.title}>GAME OVER</h1>
 
         <div className={styles.statsBox}>
-          <div className={styles.statRow}>
-            <span className={styles.statLabel}>{t('creation')}</span>
-            <span className={`${styles.statValue} ${styles.creation}`}>
-              {creationPoints}
-              <span className={styles.statUnit}>pt</span>
-            </span>
-          </div>
-
-          <div className={styles.statRow}>
-            <span className={styles.statLabel}>{t('destruction')}</span>
-            <span className={`${styles.statValue} ${styles.destruction}`}>
-              {destructionPoints}
-              <span className={styles.statUnit}>pt</span>
-            </span>
-          </div>
-
-          <div className={`${styles.statRow} ${styles.totalRow}`}>
-            <span className={styles.statLabel}>{t('total')}</span>
-            <span className={`${styles.statValue} ${styles.total}`}>
-              {totalPoints}
-              <span className={styles.statUnit}>pt</span>
-            </span>
-          </div>
-
           <div className={`${styles.statRow} ${styles.stageRow}`}>
-            <span className={styles.statLabel}>{t('stage')}</span>
-            <span className={`${styles.statValue} ${styles.stage}`}>
-              {currentStage}
+            <span className={styles.statLabel}>到達ステージ</span>
+            <span className={`${styles.statValue} ${styles.stageValue}`}>
+              Stage {stage}
+              <span className={styles.stageName}>{stageName}</span>
+            </span>
+          </div>
+
+          <div className={`${styles.statRow} ${styles.scoreRow}`}>
+            <span className={styles.statLabel}>スコア</span>
+            <span className={`${styles.statValue} ${styles.scoreValue}`}>
+              {score.toLocaleString()}
+              <span className={styles.statUnit}>pt</span>
+            </span>
+          </div>
+
+          <div className={styles.statRow}>
+            <span className={styles.statLabel}>プレイ時間</span>
+            <span className={styles.statValue}>
+              {formatTime(playTime)}
             </span>
           </div>
         </div>
 
         <div className={styles.buttons}>
-          <NeonButton onClick={onRetry}>{t('playAgain')}</NeonButton>
-          <NeonButton onClick={onTitle} variant="secondary">{t('backToTitle')}</NeonButton>
+          <NeonButton onClick={onRetry}>もう一度！</NeonButton>
+          <NeonButton onClick={onTitle} variant="secondary">タイトルへ</NeonButton>
         </div>
       </div>
     </div>
