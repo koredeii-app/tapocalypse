@@ -1,45 +1,70 @@
 /**
- * useStorage - データ永続化フック群
+ * useStorage - データ永続化ユーティリティ
  *
- * useProgression: 創造/破壊 進行データの読み書き
- * useHighScore:   旧ハイスコア（後方互換のため残存）
+ * loadSave / persistSave: ゲームセーブデータの読み書き（フック非依存）
+ * useSound: ミュート設定（後方互換）
  */
 
 import { useState, useCallback } from 'react';
 import { GAME_CONFIG } from '../game/config';
 
 // ─────────────────────────────────────────────
-// 進行データ（メイン）
+// ゲームセーブデータ（フック非依存のピュア関数）
 // ─────────────────────────────────────────────
 
-const DEFAULT_PROGRESSION = {
-  creationPoints:    0,
-  destructionPoints: 0,
-  currentStage:      1,
+const DEFAULT_SAVE = {
+  score:         0,
+  currentStage:  1,
+  remainingTime: GAME_CONFIG.STAGE_DURATION,
 };
 
-export function useProgression() {
-  const [progression, setProgression] = useState(() => {
-    try {
-      const saved = localStorage.getItem(GAME_CONFIG.PROGRESSION_STORAGE_KEY);
-      if (saved) return { ...DEFAULT_PROGRESSION, ...JSON.parse(saved) };
-    } catch (_) {}
-    return DEFAULT_PROGRESSION;
-  });
+/** localStorage からセーブデータを読み込む */
+export function loadSave() {
+  try {
+    const raw = localStorage.getItem(GAME_CONFIG.SAVE_KEY);
+    if (raw) return { ...DEFAULT_SAVE, ...JSON.parse(raw) };
+  } catch (_) {}
+  return { ...DEFAULT_SAVE };
+}
 
-  const saveProgression = useCallback((data) => {
-    try {
-      localStorage.setItem(GAME_CONFIG.PROGRESSION_STORAGE_KEY, JSON.stringify(data));
-      setProgression(data);
-    } catch (_) {}
-  }, []);
-
-  return { progression, saveProgression };
+/** localStorage にセーブデータを書き込む */
+export function persistSave(data) {
+  try {
+    localStorage.setItem(GAME_CONFIG.SAVE_KEY, JSON.stringify(data));
+  } catch (_) {}
 }
 
 // ─────────────────────────────────────────────
-// 旧ハイスコア（後方互換）
+// ミュート設定（フック）
 // ─────────────────────────────────────────────
+
+export function useSound() {
+  const [muted, setMuted] = useState(() => {
+    const saved = localStorage.getItem(GAME_CONFIG.SOUND_STORAGE_KEY);
+    return saved === 'true';
+  });
+
+  const toggleMute = useCallback(() => {
+    setMuted(prev => {
+      const next = !prev;
+      localStorage.setItem(GAME_CONFIG.SOUND_STORAGE_KEY, String(next));
+      return next;
+    });
+  }, []);
+
+  return { muted, toggleMute };
+}
+
+// ─────────────────────────────────────────────
+// 旧 API（後方互換）
+// ─────────────────────────────────────────────
+
+export function useProgression() {
+  return {
+    progression: loadSave(),
+    saveProgression: persistSave,
+  };
+}
 
 export function useStorage() {
   const [highScore, setHighScore] = useState(() => {

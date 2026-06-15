@@ -42,8 +42,14 @@ export const MODES = Object.freeze({
 // ─────────────────────────────────────────────
 
 export const GAME_CONFIG = Object.freeze({
-  /** ゲーム制限時間（秒） */
+  /** ゲーム制限時間（秒）- 後方互換のため残す */
   GAME_DURATION: 10,
+
+  /** 1ステージあたりの制限時間（秒）。ステージクリア時にこの秒数が加算される */
+  STAGE_DURATION: 10,
+
+  /** ゲームセーブデータの localStorage キー */
+  SAVE_KEY: 'tapocalypse_save',
 
   /** カウントダウンの開始値 */
   COUNTDOWN_START: 3,

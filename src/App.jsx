@@ -39,11 +39,16 @@ function App() {
 
       <GameScreen
         visible={game.screen === SCREENS.GAME}
-        tapMode={game.tapMode}
-        creationPoints={game.creationPoints}
-        destructionPoints={game.destructionPoints}
-        totalPoints={game.totalPoints}
+        score={game.score}
+        currentStage={game.currentStage}
+        stageName={game.stageName}
+        stageEmoji={game.stageEmoji}
+        multiplier={game.multiplier}
         timeLeft={game.timeLeft}
+        tapMode={game.tapMode}
+        stageUpNotify={game.stageUpNotify}
+        currentThreshold={game.currentThreshold}
+        nextThreshold={game.nextThreshold}
         onTap={game.handleTap}
         onModeChange={game.setTapMode}
       />
@@ -51,7 +56,7 @@ function App() {
       <ResultScreen
         visible={game.screen === SCREENS.RESULT}
         resultData={game.resultData}
-        onRetry={game.startCountdown}
+        onRetry={game.retryGame}
         onTitle={game.goToTitle}
       />
     </>
