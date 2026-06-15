@@ -1,32 +1,52 @@
 /**
- * useStorage - ハイスコア永続化フック
+ * useStorage - データ永続化フック群
  *
- * 現在は localStorage を使用。
- * 将来的にオンラインランキング API に差し替える際は、
- * このフックの実装だけ変えればよい（呼び出し側は変更不要）。
+ * useProgression: 創造/破壊 進行データの読み書き
+ * useHighScore:   旧ハイスコア（後方互換のため残存）
  */
 
 import { useState, useCallback } from 'react';
 import { GAME_CONFIG } from '../game/config';
 
-/**
- * @returns {{
- *   highScore: number,
- *   saveHighScore: (score: number) => boolean
- * }}
- */
+// ─────────────────────────────────────────────
+// 進行データ（メイン）
+// ─────────────────────────────────────────────
+
+const DEFAULT_PROGRESSION = {
+  creationPoints:    0,
+  destructionPoints: 0,
+  currentStage:      1,
+};
+
+export function useProgression() {
+  const [progression, setProgression] = useState(() => {
+    try {
+      const saved = localStorage.getItem(GAME_CONFIG.PROGRESSION_STORAGE_KEY);
+      if (saved) return { ...DEFAULT_PROGRESSION, ...JSON.parse(saved) };
+    } catch (_) {}
+    return DEFAULT_PROGRESSION;
+  });
+
+  const saveProgression = useCallback((data) => {
+    try {
+      localStorage.setItem(GAME_CONFIG.PROGRESSION_STORAGE_KEY, JSON.stringify(data));
+      setProgression(data);
+    } catch (_) {}
+  }, []);
+
+  return { progression, saveProgression };
+}
+
+// ─────────────────────────────────────────────
+// 旧ハイスコア（後方互換）
+// ─────────────────────────────────────────────
+
 export function useStorage() {
-  // 初回マウント時に localStorage から読み込む
   const [highScore, setHighScore] = useState(() => {
     const saved = localStorage.getItem(GAME_CONFIG.STORAGE_KEY);
     return saved ? parseInt(saved, 10) : 0;
   });
 
-  /**
-   * スコアが現在のハイスコアを超えていれば保存する
-   * @param {number} score
-   * @returns {boolean} 更新したかどうか
-   */
   const saveHighScore = useCallback((score) => {
     if (score > highScore) {
       localStorage.setItem(GAME_CONFIG.STORAGE_KEY, String(score));

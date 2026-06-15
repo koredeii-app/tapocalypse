@@ -63,6 +63,9 @@ export const GAME_CONFIG = Object.freeze({
   /** ミュート設定を保存する localStorage のキー */
   SOUND_STORAGE_KEY: 'tapocalypse_muted',
 
+  /** 創造/破壊 進行データを保存する localStorage のキー */
+  PROGRESSION_STORAGE_KEY: 'tapocalypse_progression',
+
   /** 言語設定を保存する localStorage のキー */
   LANG_STORAGE_KEY: 'tapocalypse_lang',
 
