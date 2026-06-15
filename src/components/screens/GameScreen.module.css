@@ -1,110 +1,163 @@
-.screen {
-  justify-content: space-between;
-  padding: var(--space-lg) var(--space-md);
-  padding-top: calc(env(safe-area-inset-top, 0px) + var(--space-xl));
-  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + var(--space-xl));
-}
+/* GameScreen */
 
-/* ─── ステータス ─── */
-.stats {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: 360px;
+.screen {
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
-  background: rgba(0, 0, 0, 0.45);
-  border: 1px solid rgba(109, 204, 94, 0.2);
-  border-radius: 16px;
-  padding: var(--space-lg);
-  backdrop-filter: blur(6px);
+  height: 100%;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
-.statRow {
+/* ─── 属性切替ボタン ─── */
+
+.modeToggle {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  gap: 10px;
+  padding: 14px 20px 8px;
+  justify-content: center;
+  z-index: 10;
 }
 
-.stageRow {
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding-top: var(--space-md);
-  margin-top: var(--space-xs);
+.modeBtn {
+  flex: 1;
+  max-width: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  transition: opacity 0.15s, box-shadow 0.15s;
+  opacity: 0.35;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+}
+
+.modeIcon  { font-size: 1.1rem; }
+.modeLabel { font-size: 0.85rem; }
+
+.modeBtnCreate {
+  color: var(--color-neon-cyan);
+  border-color: var(--color-neon-cyan);
+}
+
+.modeBtnDestroy {
+  color: var(--color-danger);
+  border-color: var(--color-danger);
+}
+
+.modeBtnCreate.active {
+  opacity: 1;
+  background: rgba(109, 204, 94, 0.15);
+  box-shadow: 0 0 12px rgba(109, 204, 94, 0.5);
+}
+
+.modeBtnDestroy.active {
+  opacity: 1;
+  background: rgba(255, 82, 82, 0.15);
+  box-shadow: 0 0 12px rgba(255, 82, 82, 0.5);
+}
+
+/* ─── ヘッダー ─── */
+
+.header {
+  display: flex;
+  justify-content: space-around;
+  padding: 6px 12px 10px;
+  gap: 4px;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
 }
 
 .statLabel {
-  font-size: 0.8rem;
-  letter-spacing: 0.12em;
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
   color: var(--color-text-dim);
   text-transform: uppercase;
 }
 
 .statValue {
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 1.3rem;
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
   line-height: 1;
 }
 
-.creation    { color: var(--color-neon-cyan);  text-shadow: 0 0 10px var(--color-neon-cyan); }
-.destruction { color: #ff5252;                  text-shadow: 0 0 10px #ff5252; }
-.stage       { color: var(--color-text);        font-size: 1.5rem; }
-
-/* ─── ボタン ─── */
-.buttons {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: 360px;
-  display: flex;
-  gap: var(--space-md);
+.statValue.danger {
+  color: var(--color-danger);
+  animation: pulse 0.5s ease-in-out infinite alternate;
 }
 
-.btn {
+.creation   { color: var(--color-neon-cyan); }
+.destruction { color: var(--color-danger); }
+
+/* ─── タップエリア ─── */
+
+.tapArea {
+  position: relative;
   flex: 1;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--space-sm);
-  padding: var(--space-xl) var(--space-md);
-  border-radius: 20px;
-  border: 2px solid transparent;
-  cursor: pointer;
-  touch-action: manipulation;
-  transition: transform 0.08s ease, box-shadow 0.08s ease;
-  user-select: none;
+  overflow: hidden;
+  touch-action: none;
 }
 
-.btn:active {
-  transform: scale(0.94);
+/* ─── 地球ターゲット ─── */
+
+.earthWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: min(54vw, 260px);
+  height: min(54vw, 260px);
+  animation: earthFloat 3s ease-in-out infinite;
 }
 
-.btnIcon  { font-size: 2.4rem; line-height: 1; }
-.btnLabel { font-size: 1rem; font-weight: 700; letter-spacing: 0.1em; }
-
-/* 創造ボタン */
-.btnCreate {
-  background: rgba(109, 204, 94, 0.12);
-  border-color: rgba(109, 204, 94, 0.5);
-  color: var(--color-neon-cyan);
-  box-shadow: 0 0 20px rgba(109, 204, 94, 0.15);
+.earthGlow {
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(109, 204, 94, 0.18) 0%, transparent 70%);
+  box-shadow: 0 0 40px rgba(109, 204, 94, 0.15);
+  animation: glowPulse 2s ease-in-out infinite;
+  pointer-events: none;
+  transition: background 0.3s, box-shadow 0.3s;
 }
 
-.btnCreate:active {
-  background: rgba(109, 204, 94, 0.25);
-  box-shadow: 0 0 35px rgba(109, 204, 94, 0.4);
+.earthDestructMode .earthGlow {
+  background: radial-gradient(circle, rgba(255, 82, 82, 0.18) 0%, transparent 70%);
+  box-shadow: 0 0 40px rgba(255, 82, 82, 0.15);
 }
 
-/* 破壊ボタン */
-.btnDestroy {
-  background: rgba(255, 82, 82, 0.12);
-  border-color: rgba(255, 82, 82, 0.5);
-  color: #ff5252;
-  box-shadow: 0 0 20px rgba(255, 82, 82, 0.15);
+.earth {
+  font-size: min(30vw, 140px);
+  line-height: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 16px rgba(0,0,0,0.4));
 }
 
-.btnDestroy:active {
-  background: rgba(255, 82, 82, 0.25);
-  box-shadow: 0 0 35px rgba(255, 82, 82, 0.4);
+@keyframes earthFloat {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.08); }
+}
+
+@keyframes pulse {
+  from { opacity: 1; }
+  to   { opacity: 0.4; }
 }

@@ -1,41 +1,46 @@
 /**
- * TapEffectLayer - タップエフェクト（💥）を表示するレイヤー
+ * TapEffectLayer - タップエフェクトを表示するレイヤー
  *
  * React の state を使わず、DOM を直接操作してエフェクトを生成する。
- * これにより、高速連打時でも state 更新によるレンダリングコストが発生しない。
+ * 高速連打時でも state 更新によるレンダリングコストが発生しない。
  *
  * 使い方:
  *   const tapEffectRef = useRef(null);
  *   <TapEffectLayer ref={tapEffectRef} />
- *   tapEffectRef.current.addEffect(clientX, clientY);
+ *   tapEffectRef.current.addEffect(clientX, clientY, mode);
+ *
+ *   mode: 'creation'（💧） | 'destruction'（💥）
  */
 
 import { forwardRef, useImperativeHandle, useRef } from 'react';
 import styles from './TapEffectLayer.module.css';
 
+const EFFECT_EMOJI = {
+  creation:    '💧',
+  destruction: '💥',
+};
+
 const TapEffectLayer = forwardRef(function TapEffectLayer(_, ref) {
   const containerRef = useRef(null);
 
-  // 親コンポーネントから addEffect() を呼べるようにする
   useImperativeHandle(ref, () => ({
     /**
-     * 指定座標に 💥 を表示する
-     * @param {number} x - clientX（ビューポート基準）
-     * @param {number} y - clientY（ビューポート基準）
+     * 指定座標にエフェクトを表示する
+     * @param {number} x    - clientX（ビューポート基準）
+     * @param {number} y    - clientY（ビューポート基準）
+     * @param {string} mode - 'creation' | 'destruction'
      */
-    addEffect(x, y) {
+    addEffect(x, y, mode = 'creation') {
       const container = containerRef.current;
       if (!container) return;
 
       const el = document.createElement('div');
-      // CSS Modules のクラス名（ハッシュ付き）を設定
-      el.className = styles.tapEffect;
-      el.textContent = '💧';
-      el.style.left = `${x}px`;
-      el.style.top  = `${y}px`;
+      el.className  = styles.tapEffect;
+      el.textContent = EFFECT_EMOJI[mode] ?? '💧';
+      el.style.left  = `${x}px`;
+      el.style.top   = `${y}px`;
       container.appendChild(el);
 
-      // CSS アニメーション（0.5s）終了後に DOM から削除
       setTimeout(() => el.remove(), 520);
     },
   }));
