@@ -10,20 +10,20 @@
    data-theme 属性などで切り替えられる
 ───────────────────────────────────────────── */
 :root {
-  /* 背景色（原始の深海・マグマ） */
-  --color-bg:        #080c07;
-  --color-bg-2:      #0b100a;
+  /* 背景色（深い大地・原始の森） */
+  --color-bg:        #050e08;
+  --color-bg-2:      #071209;
 
-  /* アクセントカラー（原始生命・火山・バイオルミネッセンス） */
-  --color-neon-cyan:  #ff8c00;   /* 琥珀・溶岩オレンジ（主役） */
-  --color-neon-pink:  #ff5500;   /* 深いオレンジ */
-  --color-neon-gold:  #5dff6e;   /* バイオルミネッセント緑 */
-  --color-neon-green: #39ff80;   /* 生命の緑 */
+  /* アクセントカラー（新芽・水・土） */
+  --color-neon-cyan:  #6dcc5e;   /* 新芽の緑（主役） */
+  --color-neon-pink:  #4fc3f7;   /* 水の青 */
+  --color-neon-gold:  #a8e06d;   /* 若葉の黄緑 */
+  --color-neon-green: #5dff6e;   /* 鮮やかな生命緑 */
 
   /* テキスト */
-  --color-text:       #e8dfc0;   /* 温かみあるクリーム */
-  --color-text-dim:   #7a7060;   /* 暖色ディム */
-  --color-danger:     #ff3300;   /* 溶岩レッド */
+  --color-text:       #e8f5e9;   /* 柔らかな白緑 */
+  --color-text-dim:   #6a8a6e;   /* 森の陰 */
+  --color-danger:     #ff5252;   /* 警告赤 */
 
   /* フォント */
   --font-base: system-ui, -apple-system, 'Helvetica Neue', sans-serif;

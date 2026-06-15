@@ -1,24 +1,24 @@
 /**
- * StarBackground → PrimordialBackground
+ * StarBackground → NatureBackground
  *
- * 原始の地球を漂う気泡・胞子・バイオルミネッセント粒子を生成する。
- * 将来フェーズが進むにつれ、パーティクルの色・挙動を時代に合わせて変化させる。
+ * 大地に漂う水滴・胞子・花粉をイメージしたパーティクルを生成する。
+ * フェーズが進むにつれ色・挙動を時代に合わせて変化させる想定。
  */
 
 import { useEffect, useRef } from 'react';
 import styles from './StarBackground.module.css';
 
-// 原始生命の色パレット（溶岩・バイオルミネッセンス・深海）
+// 水・大地・新芽のカラーパレット
 const PARTICLE_COLORS = [
-  '#ff8c00',  // 琥珀・火山
-  '#ff6600',  // 深いオレンジ
-  '#ffaa00',  // 黄金
-  '#5dff6e',  // バイオルミネッセント緑
-  '#00e87a',  // エメラルド
-  '#00c8a0',  // 深海ティール
+  '#4fc3f7',  // 水の青
+  '#81d4fa',  // 淡い水色
+  '#6dcc5e',  // 新芽の緑
+  '#a8e06d',  // 若葉の黄緑
+  '#c8f0a0',  // 淡い若葉
+  '#ffffff',  // 花粉・白
 ];
 
-function StarBackground({ count = 60 }) {
+function StarBackground({ count = 65 }) {
   const containerRef = useRef(null);
 
   useEffect(() => {
@@ -32,18 +32,18 @@ function StarBackground({ count = 60 }) {
       p.style.left = `${Math.random() * 100}%`;
       p.style.top  = `${Math.random() * 100}%`;
 
-      // 気泡らしく大きめの粒子を少し多めに
-      const size = Math.random() > 0.7
-        ? `${(Math.random() * 4 + 3).toFixed(1)}px`
+      // 水滴・胞子らしく丸くふっくらした粒子
+      const size = Math.random() > 0.75
+        ? `${(Math.random() * 5 + 3).toFixed(1)}px`
         : `${(Math.random() * 2 + 1).toFixed(1)}px`;
       p.style.width  = size;
       p.style.height = size;
 
       const color = PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)];
       p.style.setProperty('--particle-color',   color);
-      p.style.setProperty('--particle-opacity', (0.25 + Math.random() * 0.55).toFixed(2));
-      p.style.setProperty('--anim-duration',    `${(3 + Math.random() * 6).toFixed(1)}s`);
-      p.style.setProperty('--anim-delay',       `${(Math.random() * 6).toFixed(1)}s`);
+      p.style.setProperty('--particle-opacity', (0.2 + Math.random() * 0.5).toFixed(2));
+      p.style.setProperty('--anim-duration',    `${(4 + Math.random() * 7).toFixed(1)}s`);
+      p.style.setProperty('--anim-delay',       `${(Math.random() * 7).toFixed(1)}s`);
 
       container.appendChild(p);
     }

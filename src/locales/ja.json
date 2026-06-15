@@ -1,6 +1,6 @@
 {
   "appName":     "Tapocalypse",
-  "tagline":     "生命を生み出せ！",
+  "tagline":     "大地に命を宿せ！",
   "start":       "スタート",
   "bestScore":   "BEST SCORE",
   "timeLeft":    "残り時間",
@@ -13,5 +13,5 @@
   "flying":      "フライング！",
   "countdown3":  "時間は10秒！",
   "countdown2":  "さぁ！",
-  "countdown1":  "生命を生み出せ！"
+  "countdown1":  "育て！"
 }

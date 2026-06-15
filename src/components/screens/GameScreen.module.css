@@ -82,7 +82,7 @@
   font-size: clamp(90px, 26vw, 150px);
   line-height: 1;
   pointer-events: none;
-  filter: drop-shadow(0 0 20px rgba(255, 140, 0, 0.45));
+  filter: drop-shadow(0 0 20px rgba(109, 204, 94, 0.5));
   animation: earthFloat 4s ease-in-out infinite;
   transition: filter var(--anim-fast);
 }
@@ -126,8 +126,8 @@
 }
 
 @keyframes earthTap {
-  0%   { transform: scale(1);    filter: drop-shadow(0 0 20px rgba(255, 140, 0, 0.45)); }
-  30%  { transform: scale(0.82); filter: drop-shadow(0 0 5px  rgba(255, 100, 0, 0.2)); }
-  65%  { transform: scale(1.12); filter: drop-shadow(0 0 40px rgba(255, 200, 0, 0.95)); }
-  100% { transform: scale(1);    filter: drop-shadow(0 0 20px rgba(255, 140, 0, 0.45)); }
+  0%   { transform: scale(1);    filter: drop-shadow(0 0 20px rgba(109, 204, 94, 0.5)); }
+  30%  { transform: scale(0.82); filter: drop-shadow(0 0 5px  rgba( 79, 195,247, 0.3)); }
+  65%  { transform: scale(1.12); filter: drop-shadow(0 0 40px rgba(168, 224,109, 0.95)); }
+  100% { transform: scale(1);    filter: drop-shadow(0 0 20px rgba(109, 204, 94, 0.5)); }
 }
