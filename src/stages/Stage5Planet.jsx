@@ -104,14 +104,6 @@ function Stage5Planet({ active, onClear }) {
         <span className={styles.zoomValue}>{zoomDisplay}x</span>
       </div>
 
-      {/* 状態ヒント */}
-      <div className={styles.statusHint}>
-        {seedFound
-          ? '生命の種を発見した！'
-          : seedVisible
-            ? '種を見つけた！タップしよう'
-            : `拡大して探索しよう（目標: ${SEED_VISIBLE_ZOOM}x以上）`}
-      </div>
     </div>
   );
 }

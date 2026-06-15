@@ -108,10 +108,6 @@ function Stage4Star({ active, onClear }) {
         🌍
       </div>
 
-      {/* ヒント */}
-      {!isPlaced && !isDragging && (
-        <div className={styles.hint}>惑星をドラッグして<br />点線の軌道へ運ぼう</div>
-      )}
     </div>
   );
 }

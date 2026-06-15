@@ -79,10 +79,6 @@ function Stage2Light({ active, onClear }) {
         <div className={styles.gaugeLabel}>{Math.floor(gauge)}%</div>
       </div>
 
-      {/* ヒント */}
-      {!isHolding && !starBorn && gauge === 0 && (
-        <div className={styles.hint}>長押しして光を集める</div>
-      )}
     </div>
   );
 }

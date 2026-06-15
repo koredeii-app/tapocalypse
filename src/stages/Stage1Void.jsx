@@ -59,10 +59,6 @@ function Stage1Void({ active, onClear }) {
         </div>
       </div>
 
-      {/* 操作ヒント（まだ一度もタップしていない場合） */}
-      {count === 0 && (
-        <div className={styles.hint}>タップしよう</div>
-      )}
     </div>
   );
 }

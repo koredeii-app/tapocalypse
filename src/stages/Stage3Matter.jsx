@@ -104,10 +104,6 @@ function Stage3Matter({ active, onClear }) {
         </div>
       </div>
 
-      {/* ヒント */}
-      {collectedCount === 0 && (
-        <div className={styles.hint}>スワイプして集める</div>
-      )}
     </div>
   );
 }
