@@ -2,14 +2,15 @@
  * useGame — ゲーム状態管理フック
  *
  * ゲームループ:
- *   タップ → スコア += 倍率 → ステージ閾値チェック → ステージアップ → 時間持ち越し
+ *   タップ → スコア += 倍率 → ステージ閾値チェック
+ *   → ステージアップ → ボーナス付与 → タイマーリセット → 次ステージ
  *
  * スコア管理:
- *   累積管理（リセットしない）。セーブデータに永続化。
+ *   累積管理（リセットしない）。ステージアップ時にボーナスを加算。
+ *   ボーナス = floor(残り秒) × クリアしたステージ番号
  *
  * 時間管理:
- *   初期 10 秒。ステージクリアで残り時間 + STAGE_DURATION 秒を加算。
- *   0 になったらゲームオーバー。
+ *   各ステージ開始時に 10 秒。持ち越しなし。0 でゲームオーバー。
  */
 
 import { useState, useRef, useCallback, useEffect } from 'react';
@@ -179,22 +180,33 @@ export function useGame() {
     // ステージアップ判定
     const newStageInfo = calcStageFromScore(newScore);
     if (newStageInfo.stage > stageRef.current) {
+      const clearedStage = stageRef.current;
+
+      // ボーナス = floor(残り秒) × クリアしたステージ番号
+      const remainingSecs = Math.floor(engine.getTimeLeft());
+      const bonusScore    = remainingSecs * clearedStage;
+      if (bonusScore > 0) {
+        scoreRef.current += bonusScore;
+        setScore(scoreRef.current);
+      }
+
+      // ステージ進行
       stageRef.current = newStageInfo.stage;
       setCurrentStage(newStageInfo.stage);
 
-      // 残り時間持ち越し（現在の残り時間をそのまま加算 = 残り × 2）
-      engine.addTime(engine.getTimeLeft());
+      // タイマーリセット（持ち越しなし・次ステージも 10 秒）
+      engine.resetTimer(GAME_CONFIG.STAGE_DURATION);
 
-      // ステージアップ通知
-      setStageUpNotify({ stage: newStageInfo.stage, name: newStageInfo.name });
+      // ステージアップ通知（ボーナス付き）
+      setStageUpNotify({ stage: newStageInfo.stage, name: newStageInfo.name, bonus: bonusScore });
       clearTimeout(timers.current.notify);
       timers.current.notify = setTimeout(() => setStageUpNotify(null), 1000);
 
       // 中間セーブ
       persistSave({
-        score:         newScore,
+        score:         scoreRef.current,
         currentStage:  newStageInfo.stage,
-        remainingTime: engine.getTimeLeft(),
+        remainingTime: GAME_CONFIG.STAGE_DURATION,
       });
     }
 

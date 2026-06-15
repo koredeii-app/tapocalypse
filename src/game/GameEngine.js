@@ -4,8 +4,9 @@
  * React に依存しない純粋なタイマー管理クラス。
  * スコア・ステージ管理は useGame フック側が担当する。
  *
- * 時間持ち越しシステム:
- *   addTime(seconds) で残り時間をリアルタイムに加算できる。
+ * タイマーシステム:
+ *   各ステージ開始時に resetTimer() で 10 秒にリセットする。
+ *   持ち越しなし。0 になったらゲームオーバー。
  *   Date.now() 基準で計算するためドリフトなし。
  */
 
@@ -30,11 +31,14 @@ export class GameEngine {
   }
 
   /**
-   * 残り時間を加算する（ステージクリア時の持ち越し用）
+   * ステージクリア時にタイマーをリセットする
+   * 持ち越しなし。常に STAGE_DURATION 秒から再スタート。
    * @param {number} seconds
    */
-  addTime(seconds) {
-    this.bonusTime += seconds;
+  resetTimer(seconds = GAME_CONFIG.STAGE_DURATION) {
+    this.initialTime = seconds;
+    this.startTime   = Date.now();
+    this.bonusTime   = 0;
   }
 
   /**

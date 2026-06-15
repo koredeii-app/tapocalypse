@@ -104,6 +104,9 @@ function GameScreen({
           <div className={styles.stageUpBadge}>
             <span className={styles.stageUpLabel}>ステージアップ！</span>
             <span className={styles.stageUpName}>{stageUpNotify.name}</span>
+            {stageUpNotify.bonus > 0 && (
+              <span className={styles.stageUpBonus}>+{stageUpNotify.bonus} pt</span>
+            )}
           </div>
         </div>
       )}

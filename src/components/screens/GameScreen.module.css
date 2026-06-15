@@ -181,6 +181,14 @@
   text-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
 }
 
+.stageUpBonus {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-neon-gold);
+  text-shadow: 0 0 8px var(--color-neon-gold);
+}
+
 /* ─── 属性切替ボタン（下部） ─── */
 
 .modeBar {
