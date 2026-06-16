@@ -1,16 +1,16 @@
 /**
- * Stage 3「物質」 — スワイプで散らばった物質パーティクルを集めるチュートリアル
- * 30個集めたらクリア
+ * Stage 3「物質」 — スワイプで散らばったパーティクルを集める
+ * 30個集めたらクリア。カウントは非表示。粒子取得時に音が鳴る。
  */
 
-import { useState, useRef, useCallback, useMemo } from 'react';
+import { useRef, useCallback, useMemo, useState } from 'react';
+import { SoundManager } from '../audio/SoundManager';
 import styles from './Stage3Matter.module.css';
 
 const TOTAL_PARTICLES = 50;
 const TARGET          = 30;
-const COLLECT_RADIUS  = 28; // px
+const COLLECT_RADIUS  = 28;
 
-/** 初期パーティクルを画面全体にランダム配置 */
 function generateParticles() {
   const w = window.innerWidth;
   const h = window.innerHeight;
@@ -25,23 +25,21 @@ function generateParticles() {
 
 function Stage3Matter({ active, onClear }) {
   const initialParticles = useMemo(() => generateParticles(), []);
-  const particlesRef = useRef(initialParticles);
+  const particlesRef   = useRef(initialParticles);
   const [renderParticles, setRenderParticles] = useState(initialParticles);
-  const [collectedCount, setCollectedCount] = useState(0);
-  const collectedRef = useRef(0);
-  const clearedRef = useRef(false);
-  const isPointerDown = useRef(false);
+  const collectedRef   = useRef(0);
+  const clearedRef     = useRef(false);
+  const isPointerDown  = useRef(false);
 
   const collectNear = useCallback((cx, cy) => {
     if (!active || clearedRef.current) return;
 
     let changed = false;
-    let added = 0;
+    let added   = 0;
 
     particlesRef.current = particlesRef.current.map(p => {
       if (p.collected) return p;
-      const dist = Math.hypot(p.x - cx, p.y - cy);
-      if (dist < COLLECT_RADIUS) {
+      if (Math.hypot(p.x - cx, p.y - cy) < COLLECT_RADIUS) {
         added++;
         changed = true;
         return { ...p, collected: true };
@@ -52,7 +50,7 @@ function Stage3Matter({ active, onClear }) {
     if (changed) {
       collectedRef.current += added;
       setRenderParticles([...particlesRef.current]);
-      setCollectedCount(collectedRef.current);
+      SoundManager.playCollect();
 
       if (collectedRef.current >= TARGET) {
         clearedRef.current = true;
@@ -75,8 +73,6 @@ function Stage3Matter({ active, onClear }) {
     isPointerDown.current = false;
   }, []);
 
-  const pct = Math.min(100, (collectedCount / TARGET) * 100);
-
   return (
     <div
       className={styles.stage}
@@ -85,7 +81,6 @@ function Stage3Matter({ active, onClear }) {
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerUp}
     >
-      {/* 物質パーティクル */}
       {renderParticles.map(p => (
         <div
           key={p.id}
@@ -93,17 +88,6 @@ function Stage3Matter({ active, onClear }) {
           style={{ left: p.x, top: p.y }}
         />
       ))}
-
-      {/* 収集カウンター */}
-      <div className={styles.counter}>
-        <span className={styles.countNum}>{collectedCount}</span>
-        <span className={styles.countDivider}>/</span>
-        <span className={styles.countTotal}>{TARGET}</span>
-        <div className={styles.progressBar}>
-          <div className={styles.progressFill} style={{ width: `${pct}%` }} />
-        </div>
-      </div>
-
     </div>
   );
 }

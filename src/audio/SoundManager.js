@@ -75,4 +75,6 @@ export const SoundManager = {
   playBonus()   { play(currentSounds.bonus); },
   playStageUp() { play(currentSounds.stageUp); },
   playResult()  { play(currentSounds.result); },
+  playPoko()    { play(currentSounds.poko); },
+  playCollect() { play(currentSounds.collect); },
 };

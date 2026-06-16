@@ -101,4 +101,44 @@ function result(ctx) {
   });
 }
 
-export const normalSounds = { tap, bonus, stageUp, result };
+/** ポコッ音 — Stage1 タップ時のやわらかい打音 */
+function poko(ctx) {
+  const t    = ctx.currentTime;
+  const osc  = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(480, t);
+  osc.frequency.exponentialRampToValueAtTime(180, t + 0.11);
+
+  gain.gain.setValueAtTime(0.22, t);
+  gain.gain.exponentialRampToValueAtTime(0.001, t + 0.14);
+
+  osc.start(t);
+  osc.stop(t + 0.15);
+}
+
+/** 収集音 — Stage3 パーティクル取得時の短いチャイム */
+function collect(ctx) {
+  const t    = ctx.currentTime;
+  const osc  = ctx.createOscillator();
+  const gain = ctx.createGain();
+
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(880, t);
+  osc.frequency.exponentialRampToValueAtTime(1320, t + 0.05);
+
+  gain.gain.setValueAtTime(0.14, t);
+  gain.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+
+  osc.start(t);
+  osc.stop(t + 0.09);
+}
+
+export const normalSounds = { tap, bonus, stageUp, result, poko, collect };
