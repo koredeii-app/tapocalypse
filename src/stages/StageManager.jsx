@@ -1,9 +1,7 @@
 /**
  * StageManager — ステージ進行の統括コンポーネント
  *
- * フロー: playing → clear（クリア演出） → 次ステージ playing
- * 説明なし。体験で覚える設計。
- *
+ * クリア即座に次ステージへ遷移。演出なし。
  * 将来のステージ追加は STAGES_MAP にエントリを追加するだけ。
  */
 
@@ -26,28 +24,21 @@ const STAGES_MAP = {
 
 function StageManager({ onComplete }) {
   const [currentStage, setCurrentStage] = useState(1);
-  const [phase, setPhase] = useState('playing'); // 'playing' | 'clear'
 
   const handleClear = useCallback(() => {
-    setPhase('clear');
-    setTimeout(() => {
-      if (currentStage >= MAX_TUTORIAL_STAGE) {
-        onComplete?.();
-      } else {
-        setCurrentStage(s => s + 1);
-        setPhase('playing');
-      }
-    }, 2000);
+    if (currentStage >= MAX_TUTORIAL_STAGE) {
+      onComplete?.();
+    } else {
+      setCurrentStage(s => s + 1);
+    }
   }, [currentStage, onComplete]);
 
   const StageComponent = STAGES_MAP[currentStage];
-  const info = STAGE_INFO[currentStage];
 
   return (
     <div className={styles.container}>
-      {/* ステージ本体 */}
       <StageComponent
-        active={phase === 'playing'}
+        active={true}
         onClear={handleClear}
       />
 
@@ -55,17 +46,6 @@ function StageManager({ onComplete }) {
       <div className={styles.stageBadge}>
         Stage {currentStage}
       </div>
-
-      {/* クリア演出 */}
-      {phase === 'clear' && (
-        <div className={styles.clearOverlay}>
-          <div className={styles.clearCard}>
-            <div className={styles.clearEmoji}>{info.emoji}</div>
-            <div className={styles.clearText}>クリア</div>
-            <div className={styles.clearStageName}>{info.title}</div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

@@ -3,7 +3,7 @@
   inset: 0;
 }
 
-/* ステージ番号バッジ（プレイ中・右上） */
+/* ステージ番号バッジ（右上） */
 .stageBadge {
   position: absolute;
   top: 16px;
@@ -20,73 +20,4 @@
   padding: 5px 12px;
   pointer-events: none;
   z-index: 50;
-}
-
-/* クリア演出オーバーレイ */
-.clearOverlay {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(8px);
-  z-index: 300;
-  animation: overlayIn 0.3s ease;
-}
-
-.clearCard {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  animation: cardPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-}
-
-.clearEmoji {
-  font-size: 4rem;
-  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.6));
-  animation: emojiSpin 1.5s ease-in-out;
-}
-
-.clearText {
-  font-size: 3.2rem;
-  font-weight: 900;
-  color: #ffd700;
-  text-shadow:
-    0 0 20px rgba(255, 215, 0, 0.9),
-    0 0 40px rgba(255, 215, 0, 0.4);
-  letter-spacing: 0.08em;
-}
-
-.clearStageName {
-  font-size: 1.4rem;
-  font-weight: 700;
-  color: var(--color-neon-cyan);
-  text-shadow: 0 0 12px var(--color-neon-cyan);
-  letter-spacing: 0.12em;
-}
-
-.nextHint {
-  margin-top: 8px;
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.45);
-  letter-spacing: 0.06em;
-}
-
-@keyframes overlayIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-@keyframes cardPop {
-  from { opacity: 0; transform: scale(0.7); }
-  to   { opacity: 1; transform: scale(1); }
-}
-
-@keyframes emojiSpin {
-  0%   { transform: rotate(0deg)   scale(0.5); }
-  60%  { transform: rotate(20deg)  scale(1.2); }
-  80%  { transform: rotate(-10deg) scale(1.0); }
-  100% { transform: rotate(0deg)   scale(1.0); }
 }
