@@ -1,0 +1,279 @@
+.stage {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 55%, #060f08 0%, #030a05 55%, #010402 100%);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* ─── 惑星 ─── */
+
+.planetContainer {
+  position: relative;
+  transform-origin: center center;
+}
+
+/* 大気グロー（進捗に応じて js から box-shadow を更新） */
+.atmosphere {
+  position: absolute;
+  inset: -18px;
+  border-radius: 50%;
+  pointer-events: none;
+  transition: box-shadow 0.8s ease;
+  z-index: 0;
+}
+
+.planet {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  /* 不毛な惑星のベース */
+  background:
+    radial-gradient(circle at 34% 28%, rgba(200, 170, 120, 0.1) 0%, transparent 42%),
+    radial-gradient(circle at 50% 50%, #4a3820 0%, #2e2214 45%, #1a1408 75%, #0e0b04 100%);
+  box-shadow:
+    inset -28px -28px 56px rgba(0, 0, 0, 0.72),
+    inset 8px 8px 20px rgba(180, 150, 100, 0.025);
+}
+
+.paintCanvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ─── 進捗パネル（上部） ─── */
+
+.progressPanel {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  padding: 8px 6px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.progItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 14px;
+  font-size: 1rem;
+}
+
+.progDivider {
+  width: 1px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.progPct {
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text);
+}
+
+.progPctDim {
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-dim);
+}
+
+.dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* ─── エネルギー選択バー（下部） ─── */
+
+.energyBar {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 14px;
+}
+
+.energyBtn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 14px 30px;
+  border-radius: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+  opacity: 0.45;
+  transition: opacity 0.2s, border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.energyBtn:active {
+  transform: scale(0.96);
+}
+
+.activeOcean {
+  opacity: 1;
+  border-color: rgba(40, 110, 230, 0.75);
+  background: rgba(20, 70, 180, 0.28);
+  box-shadow: 0 0 24px rgba(40, 110, 230, 0.4);
+}
+
+.activeLand {
+  opacity: 1;
+  border-color: rgba(60, 155, 65, 0.75);
+  background: rgba(30, 90, 35, 0.28);
+  box-shadow: 0 0 24px rgba(60, 155, 65, 0.4);
+}
+
+.energyEmoji {
+  font-size: 1.8rem;
+}
+
+.energyLabel {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-text);
+}
+
+/* ─── ナラティブ ─── */
+
+.narrative {
+  position: absolute;
+  bottom: 145px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  pointer-events: none;
+  animation: narrativeFade 5s ease forwards;
+  white-space: nowrap;
+}
+
+.narrative p {
+  margin: 0;
+  line-height: 2;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.04em;
+}
+
+@keyframes narrativeFade {
+  0%   { opacity: 0; transform: translateX(-50%) translateY(8px); }
+  12%  { opacity: 1; transform: translateX(-50%) translateY(0); }
+  72%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ─── 隠しオブジェクト発見通知 ─── */
+
+.discoveryNotif {
+  position: absolute;
+  top: 84px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(5, 5, 10, 0.85);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 215, 0, 0.3);
+  border-radius: 22px;
+  padding: 10px 22px;
+  pointer-events: none;
+  white-space: nowrap;
+  animation: discoveryIn 2.8s ease forwards;
+  z-index: 100;
+}
+
+.discoveryEmoji {
+  font-size: 1.5rem;
+}
+
+.discoveryName {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #ffd700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.55);
+}
+
+@keyframes discoveryIn {
+  0%   { opacity: 0; transform: translateX(-50%) translateY(-10px) scale(0.88); }
+  10%  { opacity: 1; transform: translateX(-50%) translateY(0)     scale(1); }
+  78%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ─── 世界評価（クリア演出） ─── */
+
+.worldEval {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  pointer-events: none;
+  animation: evalIn 0.5s ease;
+  z-index: 200;
+}
+
+.evalEmoji {
+  font-size: 5rem;
+  animation: evalBounce 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.evalName {
+  font-size: 2.2rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: #ffd700;
+  text-shadow: 0 0 24px rgba(255, 215, 0, 0.8);
+}
+
+.evalDesc {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 0.04em;
+}
+
+@keyframes evalIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes evalBounce {
+  from { transform: scale(0.4); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
