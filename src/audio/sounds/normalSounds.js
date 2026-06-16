@@ -21,7 +21,7 @@ function tap(ctx) {
   osc.frequency.setValueAtTime(900, t);
   osc.frequency.exponentialRampToValueAtTime(380, t + 0.04);
 
-  gain.gain.setValueAtTime(0.28, t);
+  gain.gain.setValueAtTime(0.5, t);
   gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
 
   osc.start(t);
@@ -43,7 +43,7 @@ function bonus(ctx) {
     osc.frequency.setValueAtTime(freq, start);
 
     gain.gain.setValueAtTime(0, start);
-    gain.gain.linearRampToValueAtTime(0.3, start + 0.01);
+    gain.gain.linearRampToValueAtTime(0.5, start + 0.01);
     gain.gain.exponentialRampToValueAtTime(0.001, start + 0.18);
 
     osc.start(start);
@@ -67,7 +67,7 @@ function stageUp(ctx) {
     osc.frequency.setValueAtTime(freq, start);
 
     gain.gain.setValueAtTime(0, start);
-    gain.gain.linearRampToValueAtTime(0.22, start + 0.01);
+    gain.gain.linearRampToValueAtTime(0.4, start + 0.01);
     gain.gain.exponentialRampToValueAtTime(0.001, start + 0.22);
 
     osc.start(start);
@@ -92,8 +92,8 @@ function result(ctx) {
     osc.frequency.setValueAtTime(freq, start);
 
     gain.gain.setValueAtTime(0, start);
-    gain.gain.linearRampToValueAtTime(0.2, start + 0.02);
-    gain.gain.setValueAtTime(0.2, start + hold);
+    gain.gain.linearRampToValueAtTime(0.38, start + 0.02);
+    gain.gain.setValueAtTime(0.38, start + hold);
     gain.gain.exponentialRampToValueAtTime(0.001, start + hold + 0.25);
 
     osc.start(start);
@@ -114,7 +114,7 @@ function poko(ctx) {
   osc.frequency.setValueAtTime(480, t);
   osc.frequency.exponentialRampToValueAtTime(180, t + 0.11);
 
-  gain.gain.setValueAtTime(0.22, t);
+  gain.gain.setValueAtTime(0.4, t);
   gain.gain.exponentialRampToValueAtTime(0.001, t + 0.14);
 
   osc.start(t);
@@ -134,7 +134,7 @@ function collect(ctx) {
   osc.frequency.setValueAtTime(880, t);
   osc.frequency.exponentialRampToValueAtTime(1320, t + 0.05);
 
-  gain.gain.setValueAtTime(0.14, t);
+  gain.gain.setValueAtTime(0.26, t);
   gain.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
 
   osc.start(t);
