@@ -5,83 +5,66 @@
   touch-action: none;
   user-select: none;
   -webkit-user-select: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   overflow: hidden;
-  cursor: grab;
 }
 
-.stage:active {
-  cursor: grabbing;
+/* 軌道リング（中央に絶対配置） */
+.orbitRing {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 2px dashed rgba(180, 180, 255, 0.3);
+  box-shadow:
+    0 0 12px rgba(150, 150, 255, 0.1),
+    inset 0 0 12px rgba(150, 150, 255, 0.05);
+  pointer-events: none;
+  animation: ringPulse 3s ease-in-out infinite;
 }
 
-/* 惑星ラッパー（相対配置の基点、200×200） */
-.planetWrapper {
-  position: relative;
-  width: 200px;
-  height: 200px;
-  filter: drop-shadow(0 0 24px rgba(120, 80, 40, 0.4));
+@keyframes ringPulse {
+  0%, 100% { border-color: rgba(180, 180, 255, 0.25); }
+  50%       { border-color: rgba(180, 180, 255, 0.5); }
 }
 
-/* 惑星テクスチャ（岩石・荒涼） */
+/* 恒星（中央固定） */
+.star {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 56px;
+  pointer-events: none;
+  filter: drop-shadow(0 0 20px rgba(255, 220, 50, 0.8));
+  animation: starGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes starGlow {
+  from { filter: drop-shadow(0 0 15px rgba(255, 220, 50, 0.6)); }
+  to   { filter: drop-shadow(0 0 30px rgba(255, 220, 50, 1.0)); }
+}
+
+/* 惑星（ドラッグ可能） */
 .planet {
   position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  overflow: hidden;
-  background-image:
-    repeating-linear-gradient(
-      38deg,
-      #7a5230 0px,  #7a5230 18px,
-      #4e3118 18px, #4e3118 36px,
-      #916240 36px, #916240 50px,
-      #5c3a1f 50px, #5c3a1f 68px
-    );
-  background-size: 340px 340px;
-  background-position: var(--bgX, 0px) var(--bgY, 0px);
-}
-
-/* 固定の光源シェーディング（左上から光 → 右下に影） */
-.planetShading {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 35% 30%, rgba(255, 200, 140, 0.22) 0%, transparent 48%),
-    radial-gradient(circle at 66% 68%, rgba(0, 0, 0, 0.55) 0%, transparent 52%);
-  pointer-events: none;
-}
-
-/* 生命の芽 */
-.bud {
-  position: absolute;
-  font-size: 1.5rem;
   transform: translate(-50%, -50%);
-  cursor: pointer;
+  font-size: 40px;
+  cursor: grab;
   touch-action: none;
-  animation: budGlow 0.85s ease-in-out infinite alternate;
+  filter: drop-shadow(0 0 8px rgba(50, 150, 255, 0.5));
+  transition: filter 0.15s, transform 0.15s;
   z-index: 10;
 }
 
-@keyframes budGlow {
-  from {
-    filter: drop-shadow(0 0 4px rgba(80, 230, 80, 0.6));
-    transform: translate(-50%, -50%) scale(1);
-  }
-  to {
-    filter: drop-shadow(0 0 12px rgba(120, 255, 120, 1.0));
-    transform: translate(-50%, -50%) scale(1.18);
-  }
+.planet:active,
+.planet.dragging {
+  cursor: grabbing;
+  filter: drop-shadow(0 0 16px rgba(100, 200, 255, 0.9));
+  transform: translate(-50%, -50%) scale(1.15);
 }
 
-.budFound {
-  animation: budFound 0.9s ease-out forwards;
-  pointer-events: none;
-}
-
-@keyframes budFound {
-  0%   { transform: translate(-50%, -50%) scale(1.0); opacity: 1; }
-  50%  { transform: translate(-50%, -50%) scale(2.4); opacity: 1; }
-  100% { transform: translate(-50%, -50%) scale(0);   opacity: 0; }
+.planet.orbiting {
+  cursor: default;
+  filter: drop-shadow(0 0 20px rgba(50, 200, 100, 0.8));
 }

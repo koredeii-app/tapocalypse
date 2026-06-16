@@ -1,83 +1,88 @@
 /**
- * Stage 5「惑星」 — 惑星を回転・拡大して生命の種を探すチュートリアル
- * - 1本指ドラッグ → 惑星を回転
- * - 2本指ピンチ   → ズームイン/アウト
- * - ズーム 2x 以上で「生命の種」が出現
- * - 種をタップするとクリア
+ * Stage 5「惑星」 — 惑星を縦横に回転させて生命の芽を探す
+ * - 1本指ドラッグ → 水平・垂直に回転
+ * - 🌱 が正面に来たらタップしてクリア
  */
 
 import { useState, useRef, useCallback } from 'react';
+import { SoundManager } from '../audio/SoundManager';
 import styles from './Stage5Planet.module.css';
 
-const MIN_ZOOM = 1;
-const MAX_ZOOM = 4;
-const SEED_VISIBLE_ZOOM = 2.0;
+const PLANET_RADIUS = 100; // px（wrapper は 200×200）
+const DRAG_SENS     = Math.PI / PLANET_RADIUS; // 1px ≈ 0.0314 rad
 
-/** 惑星円内（半径 35% 以内）のランダム座標を返す */
-function randomSeedPos() {
-  let x, y;
+/** 初期正面（0,0）から十分離れたランダム角度を返す */
+function randomBudAngles() {
+  let h, v;
   do {
-    x = Math.random() * 100;
-    y = Math.random() * 100;
-  } while (Math.hypot(x - 50, y - 50) > 35);
-  return { left: `${x.toFixed(1)}%`, top: `${y.toFixed(1)}%` };
+    h = (Math.random() * 2 - 1) * Math.PI;           // -π ～ π
+    v = (Math.random() * 2 - 1) * (Math.PI * 0.45);  // ±0.45π
+  } while (Math.abs(h) < 1.4 && Math.abs(v) < 0.7);  // 正面付近は除外
+  return { h, v };
 }
 
 function Stage5Planet({ active, onClear }) {
-  const [zoom, setZoom] = useState(1);
-  const [bgOffset, setBgOffset] = useState(0); // 擬似回転用の背景オフセット
-  const [seedFound, setSeedFound] = useState(false);
-  const [seedPos] = useState(randomSeedPos);
+  const [hRad,     setHRad]     = useState(0);
+  const [vRad,     setVRad]     = useState(0);
+  const [budFound, setBudFound] = useState(false);
+  const hRadRef    = useRef(0);
+  const vRadRef    = useRef(0);
   const clearedRef = useRef(false);
-  const pointers = useRef({});
+  const activePtr  = useRef(null);
 
+  // 生命の芽の 3D 角度（マウント時一度だけ決定）
+  const budRef = useRef(null);
+  if (!budRef.current) budRef.current = randomBudAngles();
+
+  // ── 3D 球面投影: 芽の画面座標と可視判定 ─────────────────────────────
+  const dH   = budRef.current.h - hRad;
+  const dV   = budRef.current.v - vRad;
+  const cosH = Math.cos(dH);
+  const cosV = Math.cos(dV);
+  const budX = PLANET_RADIUS * Math.sin(dH) * cosV;
+  const budY = PLANET_RADIUS * Math.sin(dV);
+  const budVisible =
+    cosH > 0.08 &&
+    cosV > 0.08 &&
+    Math.hypot(budX, budY) < PLANET_RADIUS * 0.88;
+
+  // ── ドラッグ → 水平・垂直回転 ────────────────────────────────────────
   const handlePointerDown = useCallback((e) => {
-    pointers.current[e.pointerId] = { x: e.clientX, y: e.clientY };
-  }, []);
-
-  const handlePointerMove = useCallback((e) => {
-    if (!active) return;
-
-    const prevPos = pointers.current[e.pointerId];
-    if (!prevPos) return;
-
-    const newPos = { x: e.clientX, y: e.clientY };
-    const ids = Object.keys(pointers.current);
-
-    if (ids.length >= 2) {
-      // ピンチズーム
-      const otherId = ids.find(id => Number(id) !== e.pointerId);
-      if (otherId) {
-        const otherPos = pointers.current[otherId];
-        const prevDist = Math.hypot(prevPos.x - otherPos.x, prevPos.y - otherPos.y);
-        const newDist  = Math.hypot(newPos.x - otherPos.x, newPos.y - otherPos.y);
-        if (prevDist > 0) {
-          setZoom(z => Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, z * (newDist / prevDist))));
-        }
-      }
-    } else {
-      // 1本指ドラッグ → 擬似回転
-      const dx = newPos.x - prevPos.x;
-      setBgOffset(prev => prev + dx * 0.6);
-    }
-
-    pointers.current[e.pointerId] = newPos;
+    if (!active || clearedRef.current) return;
+    activePtr.current = { id: e.pointerId, x: e.clientX, y: e.clientY };
+    e.currentTarget.setPointerCapture(e.pointerId);
   }, [active]);
 
-  const handlePointerUp = useCallback((e) => {
-    delete pointers.current[e.pointerId];
+  const handlePointerMove = useCallback((e) => {
+    if (!activePtr.current || activePtr.current.id !== e.pointerId) return;
+    const dx   = e.clientX - activePtr.current.x;
+    const dy   = e.clientY - activePtr.current.y;
+    const newH = hRadRef.current + dx * DRAG_SENS;
+    const newV = vRadRef.current + dy * DRAG_SENS;
+    hRadRef.current = newH;
+    vRadRef.current = newV;
+    setHRad(newH);
+    setVRad(newV);
+    activePtr.current = { id: e.pointerId, x: e.clientX, y: e.clientY };
   }, []);
 
-  const handleSeedTap = useCallback((e) => {
-    e.stopPropagation();
-    if (!active || clearedRef.current || zoom < SEED_VISIBLE_ZOOM) return;
-    clearedRef.current = true;
-    setSeedFound(true);
-    setTimeout(() => onClear(), 1000);
-  }, [active, zoom, onClear]);
+  const handlePointerUp = useCallback((e) => {
+    if (activePtr.current?.id === e.pointerId) activePtr.current = null;
+  }, []);
 
-  const seedVisible = zoom >= SEED_VISIBLE_ZOOM;
-  const zoomDisplay = zoom.toFixed(1);
+  // ── 🌱 タップ → クリア ─────────────────────────────────────────────
+  const handleBudTap = useCallback((e) => {
+    e.stopPropagation();
+    if (!budVisible || budFound || clearedRef.current || !active) return;
+    clearedRef.current = true;
+    setBudFound(true);
+    SoundManager.playCollect();
+    setTimeout(() => onClear(), 900);
+  }, [budVisible, budFound, active, onClear]);
+
+  // テクスチャオフセット（表面が回転して見える演出）
+  const bgX = -(hRad * (400 / (Math.PI * 2)));
+  const bgY = -(vRad * (200 / Math.PI));
 
   return (
     <div
@@ -87,35 +92,29 @@ function Stage5Planet({ active, onClear }) {
       onPointerUp={handlePointerUp}
       onPointerCancel={handlePointerUp}
     >
-      {/* 惑星コンテナ（スケール変換） */}
-      <div
-        className={styles.planetContainer}
-        style={{ transform: `scale(${zoom})` }}
-      >
-        {/* 惑星本体 */}
+      <div className={styles.planetWrapper}>
+        {/* 惑星テクスチャ（回転でスクロール） */}
         <div
           className={styles.planet}
-          style={{ '--bg-offset': `${bgOffset % 400}px` }}
-        >
-          {/* 生命の種（ズーム時のみ出現） */}
-          {seedVisible && (
-            <div
-              className={`${styles.seed} ${seedFound ? styles.seedCollected : ''}`}
-              style={{ left: seedPos.left, top: seedPos.top }}
-              onPointerDown={handleSeedTap}
-            >
-              🌱
-            </div>
-          )}
-        </div>
-      </div>
+          style={{ '--bgX': `${bgX}px`, '--bgY': `${bgY}px` }}
+        />
+        {/* 固定の光源シェーディング（3D 球体感） */}
+        <div className={styles.planetShading} />
 
-      {/* ズームインジケーター */}
-      <div className={styles.zoomIndicator}>
-        <span className={styles.zoomIcon}>🔍</span>
-        <span className={styles.zoomValue}>{zoomDisplay}x</span>
+        {/* 生命の芽（正面に来たときのみ表示） */}
+        {budVisible && (
+          <div
+            className={`${styles.bud} ${budFound ? styles.budFound : ''}`}
+            style={{
+              left: `${PLANET_RADIUS + budX}px`,
+              top:  `${PLANET_RADIUS + budY}px`,
+            }}
+            onPointerDown={handleBudTap}
+          >
+            🌱
+          </div>
+        )}
       </div>
-
     </div>
   );
 }
