@@ -13,10 +13,21 @@ const MIN_ZOOM = 1;
 const MAX_ZOOM = 4;
 const SEED_VISIBLE_ZOOM = 2.0;
 
+/** 惑星円内（半径 35% 以内）のランダム座標を返す */
+function randomSeedPos() {
+  let x, y;
+  do {
+    x = Math.random() * 100;
+    y = Math.random() * 100;
+  } while (Math.hypot(x - 50, y - 50) > 35);
+  return { left: `${x.toFixed(1)}%`, top: `${y.toFixed(1)}%` };
+}
+
 function Stage5Planet({ active, onClear }) {
   const [zoom, setZoom] = useState(1);
   const [bgOffset, setBgOffset] = useState(0); // 擬似回転用の背景オフセット
   const [seedFound, setSeedFound] = useState(false);
+  const [seedPos] = useState(randomSeedPos);
   const clearedRef = useRef(false);
   const pointers = useRef({});
 
@@ -90,6 +101,7 @@ function Stage5Planet({ active, onClear }) {
           {seedVisible && (
             <div
               className={`${styles.seed} ${seedFound ? styles.seedCollected : ''}`}
+              style={{ left: seedPos.left, top: seedPos.top }}
               onPointerDown={handleSeedTap}
             >
               🌱

@@ -42,11 +42,9 @@
     0 0 100px rgba(20, 60, 30, 0.15);
 }
 
-/* 生命の種 */
+/* 生命の種（位置は JS でランダム設定） */
 .seed {
   position: absolute;
-  left: 38%;
-  top: 32%;
   font-size: 1.6rem;
   transform: translate(-50%, -50%);
   cursor: pointer;
